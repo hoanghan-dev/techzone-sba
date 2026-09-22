@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi Tiết Sản Phẩm - TechZone</title>
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <span><i class="bi bi-headset me-1"></i> Hotline: <strong>0916 973 161</strong></span>
+        <span><i class="bi bi-envelope me-1"></i> support@techzone.vn</span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <a href="../admin/dashboard.html" class="text-decoration-none"><i class="bi bi-shield-lock me-1"></i> Admin Portal</a>
+        <span>|</span>
+        <a href="orders.html" class="text-decoration-none"><i class="bi bi-truck me-1"></i> Tra cứu đơn hàng</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="navbar-main d-flex justify-content-between align-items-center gap-3">
+        <a href="../index.html" class="brand-logo text-decoration-none">
+          TechZone<span class="dot">.</span>
+        </a>
+
+        <!-- Search Form -->
+        <div class="header-search flex-grow-1 mx-md-4">
+          <form action="products.html" method="GET">
+            <div class="input-group">
+              <input type="text" name="txtSearch" class="form-control" placeholder="Tìm kiếm laptop, điện thoại, phụ kiện..." required>
+              <button class="btn btn-search" type="submit"><i class="bi bi-search fs-6"></i></button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Actions -->
+        <div class="nav-actions">
+          <div id="user-auth-menu"></div>
+          <a href="cart.html" class="nav-action-btn cart-badge-icon text-decoration-none">
+            <i class="bi bi-cart3 fs-4"></i>
+            <span class="cart-counter" style="display: none;">0</span>
+            <span class="d-none d-lg-inline">Giỏ hàng</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Product Detail Content -->
+  <main class="py-4">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb small">
+          <li class="breadcrumb-item"><a href="../index.html">Trang chủ</a></li>
+          <li class="breadcrumb-item"><a href="products.html" id="detail-category-link">Sản phẩm</a></li>
+          <li class="breadcrumb-item active text-truncate" id="detail-product-name" style="max-width: 300px;">...</li>
+        </ol>
+      </nav>
+
+      <!-- Main Product Card -->
+      <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 mb-5">
+        <div class="row g-4 g-lg-5">
+          <!-- Gallery Col -->
+          <div class="col-lg-5">
+            <div class="border rounded-4 p-4 text-center bg-white mb-3 position-relative" style="min-height: 380px; display: flex; align-items: center; justify-content: center;">
+              <span class="badge-sale position-absolute top-0 start-0 m-3" id="detail-discount-badge" style="display: none;"></span>
+              <img src="" id="detail-main-img" alt="" class="img-fluid rounded-3" style="max-height: 340px; object-fit: contain;">
+            </div>
+
+            <!-- Thumbnails -->
+            <div class="row g-2 justify-content-center" id="detail-thumbnail-container">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Info Col -->
+          <div class="col-lg-7">
+            <h1 class="fw-bold fs-2 mb-2 text-dark" id="detail-product-name-heading">...</h1>
+            
+            <div class="d-flex align-items-center gap-3 mb-3 text-secondary small">
+              <div class="d-flex align-items-center text-warning">
+                <i class="bi bi-star-fill me-1"></i>
+                <strong class="text-dark me-1" id="detail-rating-val">0.0</strong>
+                <span class="text-muted">(<span id="detail-review-count-val">0</span> đánh giá)</span>
+              </div>
+              <span>|</span>
+              <div>Đã bán: <strong class="text-dark" id="detail-sold-val">0</strong></div>
+              <span>|</span>
+              <div id="detail-stock-status"></div>
+            </div>
+
+            <!-- Pricing Box -->
+            <div class="p-3 rounded-3 bg-light mb-4">
+              <div class="d-flex align-items-baseline gap-3">
+                <span class="fs-2 fw-bold text-danger" id="detail-price">0₫</span>
+                <span class="fs-5 text-muted text-decoration-line-through" id="detail-orig-price">0₫</span>
+              </div>
+              <small class="text-muted"><i class="bi bi-shield-check text-success me-1"></i>Giá đã bao gồm VAT & Bảo hành chính hãng 12 tháng</small>
+            </div>
+
+            <!-- Description -->
+            <p class="text-secondary mb-4 fs-6 lh-base" id="detail-description"></p>
+
+            <!-- Quantity Selector -->
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <label class="fw-semibold text-dark">Số lượng:</label>
+              <div class="quantity-stepper">
+                <button type="button" onclick="handleQuantityStep(-1)">-</button>
+                <input type="text" id="detail-quantity" value="1" readonly>
+                <button type="button" onclick="handleQuantityStep(1)">+</button>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-3 mb-4 flex-wrap">
+              <button type="button" class="btn btn-outline-primary btn-lg px-4 py-3 rounded-3 fw-bold flex-grow-1 d-flex align-items-center justify-content-center gap-2" id="btn-detail-add-cart">
+                <i class="bi bi-cart-plus fs-5"></i>
+                <span>Thêm vào giỏ hàng</span>
+              </button>
+              <button type="button" class="btn btn-primary btn-lg px-5 py-3 rounded-3 fw-bold flex-grow-1" id="btn-detail-buy-now">
+                Mua ngay
+              </button>
+            </div>
+
+            <!-- Value Props -->
+            <div class="row g-2 border-top pt-3">
+              <div class="col-sm-4 d-flex align-items-center gap-2 text-secondary small">
+                <i class="bi bi-truck text-primary fs-5"></i>
+                <span>Giao nhanh toàn quốc</span>
+              </div>
+              <div class="col-sm-4 d-flex align-items-center gap-2 text-secondary small">
+                <i class="bi bi-arrow-repeat text-primary fs-5"></i>
+                <span>30 ngày lỗi 1 đổi 1</span>
+              </div>
+              <div class="col-sm-4 d-flex align-items-center gap-2 text-secondary small">
+                <i class="bi bi-shield-lock text-primary fs-5"></i>
+                <span>Cam kết chính hãng</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Specs & Reviews Tabs -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-5">
+        <ul class="nav nav-pills mb-4 gap-2 border-bottom pb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active rounded-pill fw-bold px-4" id="pills-specs-tab" data-bs-toggle="pill" data-bs-target="#pills-specs" type="button" role="tab">
+              Thông Số Kỹ Thuật
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-pill fw-bold px-4" id="pills-reviews-tab" data-bs-toggle="pill" data-bs-target="#pills-reviews" type="button" role="tab">
+              Đánh Giá & Nhận Xét
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+          <!-- Specs Tab -->
+          <div class="tab-pane fade show active" id="pills-specs" role="tabpanel">
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped align-middle" id="detail-specs-table">
+                <!-- Rendered by JS -->
+              </table>
+            </div>
+          </div>
+
+          <!-- Reviews Tab -->
+          <div class="tab-pane fade" id="pills-reviews" role="tabpanel">
+            <!-- Review Submission Form (Mock with purchase eligibility check) -->
+            <div class="card bg-light border-0 rounded-4 p-4 mb-4">
+              <h5 class="fw-bold mb-2">Gửi nhận xét của bạn</h5>
+              <p class="text-muted small mb-3">
+                <i class="bi bi-info-circle me-1"></i> Theo quy định của TechZone, bạn cần đã từng mua sản phẩm này để gửi đánh giá.
+              </p>
+
+              <form id="reviewForm" onsubmit="handleReviewSubmit(event)">
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Đánh giá sao:</label>
+                  <div class="d-flex gap-2 text-warning fs-4" id="star-rating-picker">
+                    <i class="bi bi-star-fill cursor-pointer" data-val="1" onclick="setRatingValue(1)"></i>
+                    <i class="bi bi-star-fill cursor-pointer" data-val="2" onclick="setRatingValue(2)"></i>
+                    <i class="bi bi-star-fill cursor-pointer" data-val="3" onclick="setRatingValue(3)"></i>
+                    <i class="bi bi-star-fill cursor-pointer" data-val="4" onclick="setRatingValue(4)"></i>
+                    <i class="bi bi-star-fill cursor-pointer" data-val="5" onclick="setRatingValue(5)"></i>
+                  </div>
+                  <input type="hidden" id="review-rating" value="5">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Bình luận cảm nhận:</label>
+                  <textarea class="form-control" id="review-comment" rows="3" placeholder="Chia sẻ cảm nhận về hiệu năng, thiết kế hoặc trải nghiệm sử dụng..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary px-4 rounded-pill fw-semibold">
+                  Gửi đánh giá
+                </button>
+              </form>
+            </div>
+
+            <!-- Reviews List -->
+            <h5 class="fw-bold mb-3">Đánh giá từ người mua</h5>
+            <div id="detail-reviews-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Products -->
+      <section class="mt-5">
+        <h3 class="fw-bold mb-4">Sản Phẩm Cùng Phân Khúc</h3>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" id="detail-related-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container text-center text-secondary small">
+      © 2026 TechZone. All rights reserved. Bản quyền thuộc về PRJ301_SE1910_G6.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/products.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      initProductDetailPage();
+    });
+
+    function setRatingValue(val) {
+      document.getElementById("review-rating").value = val;
+      const stars = document.querySelectorAll("#star-rating-picker i");
+      stars.forEach((s, idx) => {
+        if (idx < val) {
+          s.classList.replace("bi-star", "bi-star-fill");
+        } else {
+          s.classList.replace("bi-star-fill", "bi-star");
+        }
+      });
+    }
+
+    function handleReviewSubmit(e) {
+      e.preventDefault();
+      const rating = parseInt(document.getElementById("review-rating").value);
+      const comment = document.getElementById("review-comment").value.trim();
+
+      const user = getCurrentUser();
+      if (!user) {
+        showToast("Vui lòng đăng nhập để gửi đánh giá!", "warning");
+        return;
+      }
+
+      // Check if user has purchased this product (from mock orders)
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = parseInt(urlParams.get("id")) || 1;
+      const hasPurchased = SAMPLE_ORDERS.some(o => o.items.some(i => i.productId === productId));
+
+      if (!hasPurchased) {
+        showToast("Bạn chưa mua đơn hàng chứa sản phẩm này nên không thể gửi feedback. Vui lòng đặt hàng để trải nghiệm!", "warning");
+        return;
+      }
+
+      // Append new review
+      SAMPLE_REVIEWS.unshift({
+        id: Date.now(),
+        productId: productId,
+        author: user.fullname || user.username,
+        rating: rating,
+        date: new Date().toISOString().slice(0, 16).replace("T", " "),
+        verified: true,
+        content: comment,
+        adminReply: null
+      });
+
+      showToast("Cảm ơn bạn! Đánh giá đã được gửi thành công.", "success");
+      document.getElementById("review-comment").value = "";
+      renderProductReviews(PRODUCTS.find(p => p.id === productId));
+    }
+  </script>
+</body>
+</html>

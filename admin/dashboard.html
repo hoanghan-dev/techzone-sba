@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Điều Khiển Quản Trị - TechZone</title>
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="bg-light">
+
+  <div class="admin-layout d-flex min-vh-100">
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar bg-dark text-white p-3 d-flex flex-column justify-content-between" style="width: 260px; min-height: 100vh;">
+      <div>
+        <div class="d-flex align-items-center justify-content-between px-2 py-3 mb-4 border-bottom border-secondary border-opacity-25">
+          <a href="dashboard.html" class="brand-logo text-white text-decoration-none fs-4">
+            TechZone<span class="dot">.</span> <span class="badge bg-primary fs-6 fw-normal ms-1">Admin</span>
+          </a>
+        </div>
+
+        <nav class="nav flex-column gap-1">
+          <a href="dashboard.html" class="nav-link text-white active bg-primary rounded-3 px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-grid-1x2-fill"></i> Tổng Quan
+          </a>
+          <a href="products.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-box-seam-fill"></i> Quản Lý Sản Phẩm
+          </a>
+          <a href="orders.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-receipt"></i> Quản Lý Đơn Hàng
+          </a>
+          <a href="vouchers.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-ticket-perforated-fill"></i> Mã Giảm Giá
+          </a>
+          <a href="users.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-people-fill"></i> Tài Khoản Người Dùng
+          </a>
+          <a href="feedback.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-chat-left-text-fill"></i> Đánh Giá & Phản Hồi
+          </a>
+        </nav>
+      </div>
+
+      <div class="border-top border-secondary border-opacity-25 pt-3">
+        <a href="../index.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+          <i class="bi bi-shop"></i> Xem Cửa Hàng
+        </a>
+        <a href="javascript:void(0)" onclick="logout()" class="nav-link text-danger px-3 py-2 d-flex align-items-center gap-3">
+          <i class="bi bi-box-arrow-right"></i> Đăng Xuất
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Admin Content Area -->
+    <main class="flex-grow-1 p-3 p-md-4 overflow-auto">
+      <!-- Admin Topbar -->
+      <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded-4 shadow-sm">
+        <div>
+          <h4 class="fw-bold mb-0">Bảng Điều Khiển Tổng Quan</h4>
+          <span class="text-muted small">Dữ liệu kinh doanh và hoạt động thời gian thực của hệ thống TechZone</span>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="dropdown">
+            <button class="btn btn-light rounded-circle position-relative p-2" type="button">
+              <i class="bi bi-bell-fill text-secondary"></i>
+              <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+            </button>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80" class="rounded-circle" width="40" height="40" alt="Admin">
+            <div class="d-none d-md-block text-start">
+              <div class="fw-bold small" id="adminName">Admin User</div>
+              <div class="text-muted" style="font-size: 0.75rem;">Quản trị viên cấp cao</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 KPI Cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <span class="text-muted small fw-semibold">Tổng Doanh Thu</span>
+                <h4 class="fw-bold text-dark mt-2 mb-0" id="kpiRevenue">158,450,000₫</h4>
+                <span class="text-success small fw-semibold"><i class="bi bi-arrow-up-right me-1"></i>+14.8%</span> <span class="text-muted small">so với tháng trước</span>
+              </div>
+              <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-4">
+                <i class="bi bi-currency-dollar fs-3"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <span class="text-muted small fw-semibold">Tổng Đơn Hàng</span>
+                <h4 class="fw-bold text-dark mt-2 mb-0" id="kpiOrders">24</h4>
+                <span class="text-success small fw-semibold"><i class="bi bi-arrow-up-right me-1"></i>+8.2%</span> <span class="text-muted small">đơn thành công</span>
+              </div>
+              <div class="bg-success bg-opacity-10 text-success p-3 rounded-4">
+                <i class="bi bi-bag-check-fill fs-3"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <span class="text-muted small fw-semibold">Sản Phẩm Trong Kho</span>
+                <h4 class="fw-bold text-dark mt-2 mb-0" id="kpiProducts">12</h4>
+                <span class="text-warning small fw-semibold"><i class="bi bi-exclamation-triangle me-1"></i>1 hết hàng</span>
+              </div>
+              <div class="bg-warning bg-opacity-10 text-warning p-3 rounded-4">
+                <i class="bi bi-box-seam-fill fs-3"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-3">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <span class="text-muted small fw-semibold">Khách Hàng Đăng Ký</span>
+                <h4 class="fw-bold text-dark mt-2 mb-0" id="kpiUsers">128</h4>
+                <span class="text-success small fw-semibold"><i class="bi bi-arrow-up-right me-1"></i>+12 mới</span> <span class="text-muted small">tuần này</span>
+              </div>
+              <div class="bg-info bg-opacity-10 text-info p-3 rounded-4">
+                <i class="bi bi-people-fill fs-3"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts & Status Breakdown -->
+      <div class="row g-4 mb-4">
+        <!-- Category Sales Share -->
+        <div class="col-lg-7">
+          <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5 class="fw-bold mb-0">Tỷ Trọng Doanh Thu Danh Mục</h5>
+              <span class="badge bg-light text-muted border">Quý 1/2026</span>
+            </div>
+
+            <div class="mb-4">
+              <div class="d-flex justify-content-between small fw-semibold mb-1">
+                <span><i class="bi bi-laptop text-primary me-2"></i>Laptops (Dell, Asus, MacBook)</span>
+                <span class="text-dark">65% (103,000,000₫)</span>
+              </div>
+              <div class="progress rounded-pill" style="height: 10px;">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 65%"></div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <div class="d-flex justify-content-between small fw-semibold mb-1">
+                <span><i class="bi bi-phone text-success me-2"></i>Smartphones (iPhone, Samsung)</span>
+                <span class="text-dark">25% (39,600,000₫)</span>
+              </div>
+              <div class="progress rounded-pill" style="height: 10px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 25%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="d-flex justify-content-between small fw-semibold mb-1">
+                <span><i class="bi bi-headphones text-warning me-2"></i>Phụ Kiện (Sony, Apple, Chuột, Phím)</span>
+                <span class="text-dark">10% (15,850,000₫)</span>
+              </div>
+              <div class="progress rounded-pill" style="height: 10px;">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: 10%"></div>
+              </div>
+            </div>
+
+            <div class="alert alert-primary d-flex align-items-center gap-3 mt-4 mb-0 rounded-3">
+              <i class="bi bi-lightbulb-fill fs-4 text-primary"></i>
+              <div class="small">
+                <strong>Gợi ý kinh doanh:</strong> Dòng laptop gaming Asus ROG và MacBook Air đang có tốc độ xoay vòng vốn cao nhất. Hãy bổ sung thêm tồn kho để chuẩn bị cho mùa khuyến mãi sắp tới.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Status Summary -->
+        <div class="col-lg-5">
+          <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+            <h5 class="fw-bold mb-4">Tình Trạng Đơn Hàng</h5>
+            
+            <div class="d-flex flex-column gap-3">
+              <div class="p-3 rounded-3 bg-light d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="p-2 rounded-circle bg-warning bg-opacity-25 text-warning">
+                    <i class="bi bi-hourglass-split fs-5"></i>
+                  </span>
+                  <div>
+                    <div class="fw-bold text-dark small">Chờ Xác Nhận (PROCESSING)</div>
+                    <span class="text-muted" style="font-size: 0.75rem;">Cần kiểm tra & duyệt đơn</span>
+                  </div>
+                </div>
+                <h5 class="fw-bold text-warning mb-0" id="statProcessing">3</h5>
+              </div>
+
+              <div class="p-3 rounded-3 bg-light d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="p-2 rounded-circle bg-info bg-opacity-25 text-info">
+                    <i class="bi bi-truck fs-5"></i>
+                  </span>
+                  <div>
+                    <div class="fw-bold text-dark small">Đang Giao Hàng (PENDING)</div>
+                    <span class="text-muted" style="font-size: 0.75rem;">Đơn vị vận chuyển đang phát</span>
+                  </div>
+                </div>
+                <h5 class="fw-bold text-info mb-0" id="statPending">5</h5>
+              </div>
+
+              <div class="p-3 rounded-3 bg-light d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="p-2 rounded-circle bg-success bg-opacity-25 text-success">
+                    <i class="bi bi-check2-all fs-5"></i>
+                  </span>
+                  <div>
+                    <div class="fw-bold text-dark small">Đã Hoàn Thành (COMPLETED)</div>
+                    <span class="text-muted" style="font-size: 0.75rem;">Đã thu tiền & giao thành công</span>
+                  </div>
+                </div>
+                <h5 class="fw-bold text-success mb-0" id="statCompleted">14</h5>
+              </div>
+
+              <div class="p-3 rounded-3 bg-light d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="p-2 rounded-circle bg-danger bg-opacity-25 text-danger">
+                    <i class="bi bi-x-circle fs-5"></i>
+                  </span>
+                  <div>
+                    <div class="fw-bold text-dark small">Đã Hủy (CANCELED)</div>
+                    <span class="text-muted" style="font-size: 0.75rem;">Khách hủy hoặc hết hàng</span>
+                  </div>
+                </div>
+                <h5 class="fw-bold text-danger mb-0" id="statCanceled">2</h5>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders Table -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">Đơn Hàng Gần Đây</h5>
+          <a href="orders.html" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+            Xem Tất Cả <i class="bi bi-arrow-right ms-1"></i>
+          </a>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light small">
+              <tr>
+                <th>MÃ ĐƠN</th>
+                <th>KHÁCH HÀNG</th>
+                <th>NGÀY ĐẶT</th>
+                <th>TỔNG TIỀN</th>
+                <th>THANH TOÁN</th>
+                <th>TRẠNG THÁI</th>
+                <th class="text-end">THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody id="recentOrdersBody" class="small">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Top Selling Products -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">Sản Phẩm Bán Chạy</h5>
+          <a href="products.html" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+            Quản Lý Tồn Kho <i class="bi bi-arrow-right ms-1"></i>
+          </a>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light small">
+              <tr>
+                <th>SẢN PHẨM</th>
+                <th>DANH MỤC</th>
+                <th>GIÁ BÁN</th>
+                <th>TỒN KHO</th>
+                <th>ĐÃ BÁN</th>
+                <th>ĐÁNH GIÁ</th>
+              </tr>
+            </thead>
+            <tbody id="topProductsBody" class="small">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Load orders from localStorage or default
+      const orders = getSavedOrders();
+      renderRecentOrders(orders.slice(0, 5));
+      renderTopProducts();
+    });
+
+    function renderRecentOrders(orders) {
+      const tbody = document.getElementById("recentOrdersBody");
+      tbody.innerHTML = orders.map(order => {
+        let badgeClass = "bg-warning text-dark";
+        let statusText = "Chờ Xác Nhận";
+        if (order.status === "PENDING") {
+          badgeClass = "bg-info text-white";
+          statusText = "Đang Giao";
+        } else if (order.status === "COMPLETED") {
+          badgeClass = "bg-success text-white";
+          statusText = "Hoàn Thành";
+        } else if (order.status === "CANCELED") {
+          badgeClass = "bg-danger text-white";
+          statusText = "Đã Hủy";
+        }
+
+        return `
+          <tr>
+            <td class="fw-bold text-primary">#${order.id}</td>
+            <td>
+              <div class="fw-semibold text-dark">${order.customerName}</div>
+              <div class="text-muted" style="font-size: 0.75rem;">${order.phone}</div>
+            </td>
+            <td>${order.createdAt}</td>
+            <td class="fw-bold text-dark">${formatVND(order.totalAmount)}</td>
+            <td><span class="badge bg-light text-dark border">${order.paymentMethod}</span></td>
+            <td><span class="badge ${badgeClass} rounded-pill">${statusText}</span></td>
+            <td class="text-end">
+              <a href="orders.html?id=${order.id}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                Chi Tiết
+              </a>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderTopProducts() {
+      const tbody = document.getElementById("topProductsBody");
+      const topList = PRODUCTS.slice(0, 5);
+
+      tbody.innerHTML = topList.map(p => {
+        const cat = CATEGORIES.find(c => c.id === p.categoryId);
+        return `
+          <tr>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <img src="../${p.image}" class="rounded border p-1" width="40" height="40" style="object-fit: contain;">
+                <div>
+                  <div class="fw-semibold text-dark text-truncate" style="max-width: 250px;">${p.name}</div>
+                  <span class="text-muted" style="font-size: 0.75rem;">SKU: ${p.sku}</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge bg-light text-secondary border">${cat ? cat.name : "N/A"}</span></td>
+            <td class="fw-bold text-dark">${formatVND(p.price)}</td>
+            <td>
+              <span class="badge ${p.stock > 0 ? "bg-success bg-opacity-10 text-success" : "bg-danger bg-opacity-10 text-danger"}">
+                ${p.stock > 0 ? `Còn ${p.stock} máy` : "Hết hàng"}
+              </span>
+            </td>
+            <td class="fw-semibold text-dark">${p.reviewCount * 2 + 15} đã bán</td>
+            <td>
+              <span class="text-warning"><i class="bi bi-star-fill me-1"></i>${p.rating}</span>
+              <span class="text-muted small">(${p.reviewCount})</span>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+  </script>
+</body>
+</html>

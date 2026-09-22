@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Mã Giảm Giá - TechZone Admin</title>
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="bg-light">
+
+  <div class="admin-layout d-flex min-vh-100">
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar bg-dark text-white p-3 d-flex flex-column justify-content-between" style="width: 260px; min-height: 100vh;">
+      <div>
+        <div class="d-flex align-items-center justify-content-between px-2 py-3 mb-4 border-bottom border-secondary border-opacity-25">
+          <a href="dashboard.html" class="brand-logo text-white text-decoration-none fs-4">
+            TechZone<span class="dot">.</span> <span class="badge bg-primary fs-6 fw-normal ms-1">Admin</span>
+          </a>
+        </div>
+
+        <nav class="nav flex-column gap-1">
+          <a href="dashboard.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-grid-1x2-fill"></i> Tổng Quan
+          </a>
+          <a href="products.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-box-seam-fill"></i> Quản Lý Sản Phẩm
+          </a>
+          <a href="orders.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-receipt"></i> Quản Lý Đơn Hàng
+          </a>
+          <a href="vouchers.html" class="nav-link text-white active bg-primary rounded-3 px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-ticket-perforated-fill"></i> Mã Giảm Giá
+          </a>
+          <a href="users.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-people-fill"></i> Tài Khoản Người Dùng
+          </a>
+          <a href="feedback.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-chat-left-text-fill"></i> Đánh Giá & Phản Hồi
+          </a>
+        </nav>
+      </div>
+
+      <div class="border-top border-secondary border-opacity-25 pt-3">
+        <a href="../index.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+          <i class="bi bi-shop"></i> Xem Cửa Hàng
+        </a>
+        <a href="javascript:void(0)" onclick="logout()" class="nav-link text-danger px-3 py-2 d-flex align-items-center gap-3">
+          <i class="bi bi-box-arrow-right"></i> Đăng Xuất
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1 p-3 p-md-4 overflow-auto">
+      <!-- Header Bar -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 bg-white p-3 rounded-4 shadow-sm">
+        <div>
+          <h4 class="fw-bold mb-0">Quản Lý Mã Khuyến Mãi (Vouchers)</h4>
+          <span class="text-muted small">Tạo và cấu hình các mã giảm giá cho sự kiện, khách hàng mới và danh mục</span>
+        </div>
+        <button class="btn btn-primary rounded-pill px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#voucherModal" onclick="openAddVoucherModal()">
+          <i class="bi bi-plus-lg me-1"></i> Tạo Voucher Mới
+        </button>
+      </div>
+
+      <!-- Vouchers List Table -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light small">
+              <tr>
+                <th>MÃ VOUCHER</th>
+                <th>TIÊU ĐỀ KHUYẾN MÃI</th>
+                <th>LOẠI GIẢM</th>
+                <th>MỨC GIẢM</th>
+                <th>ĐƠN TỐI THIỂU</th>
+                <th>GIẢM TỐI ĐA</th>
+                <th>HẠN SỬ DỤNG</th>
+                <th>TRẠNG THÁI</th>
+                <th class="text-end">THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody id="vouchersTableBody" class="small">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Voucher Modal -->
+  <div class="modal fade" id="voucherModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="voucherModalTitle">Tạo Mã Giảm Giá Mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="voucherForm" onsubmit="handleSaveVoucher(event)">
+            <input type="hidden" id="edit-voucher-id">
+
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">Mã code voucher *</label>
+              <input type="text" class="form-control text-uppercase" id="v-code" required placeholder="VD: TECHZONE2026">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">Tiêu đề khuyến mãi *</label>
+              <input type="text" class="form-control" id="v-title" required placeholder="VD: Giảm 10% mừng đại lễ">
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label small fw-semibold">Loại giảm giá *</label>
+                <select class="form-select" id="v-type" required onchange="toggleDiscountUnit(this.value)">
+                  <option value="PERCENT">Phần trăm (%)</option>
+                  <option value="FIXED">Số tiền cố định (VNĐ)</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label small fw-semibold">Mức giảm *</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" id="v-value" required min="1" placeholder="10">
+                  <span class="input-group-text small" id="discountUnitText">%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label small fw-semibold">Đơn hàng tối thiểu (VNĐ)</label>
+                <input type="number" class="form-control" id="v-min-order" min="0" step="10000" placeholder="500000">
+              </div>
+              <div class="col-6">
+                <label class="form-label small fw-semibold">Mức giảm tối đa (VNĐ)</label>
+                <input type="number" class="form-control" id="v-max-discount" min="0" step="10000" placeholder="1000000">
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label small fw-semibold">Ngày hết hạn *</label>
+              <input type="date" class="form-control" id="v-expiry" required value="2026-12-31">
+            </div>
+
+            <div class="text-end">
+              <button type="button" class="btn btn-light rounded-pill px-4 me-2" data-bs-dismiss="modal">Hủy</button>
+              <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold">Lưu Voucher</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+
+  <script>
+    let localVouchers = [...VOUCHERS];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderVouchers();
+    });
+
+    function renderVouchers() {
+      const tbody = document.getElementById("vouchersTableBody");
+      tbody.innerHTML = localVouchers.map(v => {
+        const isExpired = new Date(v.expiryDate) < new Date();
+        const discountDisplay = v.discountType === "PERCENT" ? `${v.discountValue}%` : formatVND(v.discountValue);
+
+        return `
+          <tr>
+            <td>
+              <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1 fs-6 fw-bold">
+                ${v.code}
+              </span>
+            </td>
+            <td class="fw-semibold text-dark">${v.title}</td>
+            <td><span class="badge bg-light text-dark border">${v.discountType === "PERCENT" ? "Phần trăm" : "Tiền mặt"}</span></td>
+            <td class="fw-bold text-success">${discountDisplay}</td>
+            <td>${v.minOrderValue ? formatVND(v.minOrderValue) : "Không giới hạn"}</td>
+            <td>${v.maxDiscount ? formatVND(v.maxDiscount) : "Không giới hạn"}</td>
+            <td>${v.expiryDate}</td>
+            <td>
+              <span class="badge ${isExpired ? "bg-secondary" : "bg-success"} rounded-pill">
+                ${isExpired ? "Hết hạn" : "Đang áp dụng"}
+              </span>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="deleteVoucher('${v.code}')">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function toggleDiscountUnit(type) {
+      document.getElementById("discountUnitText").innerText = type === "PERCENT" ? "%" : "₫";
+    }
+
+    function openAddVoucherModal() {
+      document.getElementById("voucherForm").reset();
+      document.getElementById("voucherModalTitle").innerText = "Tạo Mã Giảm Giá Mới";
+    }
+
+    function handleSaveVoucher(e) {
+      e.preventDefault();
+      const code = document.getElementById("v-code").value.trim().toUpperCase();
+      const title = document.getElementById("v-title").value.trim();
+      const discountType = document.getElementById("v-type").value;
+      const discountValue = parseFloat(document.getElementById("v-value").value);
+      const minOrderValue = parseFloat(document.getElementById("v-min-order").value) || 0;
+      const maxDiscount = parseFloat(document.getElementById("v-max-discount").value) || null;
+      const expiryDate = document.getElementById("v-expiry").value;
+
+      localVouchers.unshift({
+        id: Date.now(),
+        code,
+        title,
+        discountType,
+        discountValue,
+        minOrderValue,
+        maxDiscount,
+        expiryDate
+      });
+
+      showToast(`Tạo voucher [${code}] thành công!`, "success");
+      bootstrap.Modal.getInstance(document.getElementById("voucherModal")).hide();
+      renderVouchers();
+    }
+
+    function deleteVoucher(code) {
+      if (confirm(`Bạn có chắc muốn xóa mã giảm giá [${code}]?`)) {
+        localVouchers = localVouchers.filter(v => v.code !== code);
+        showToast(`Đã xóa voucher [${code}]!`, "info");
+        renderVouchers();
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Ký Tài Khoản - TechZone</title>
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="bg-light d-flex align-items-center min-vh-100 py-4">
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xl-10">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+          <div class="row g-0">
+            <!-- Left: Showcase Carousel -->
+            <div class="col-lg-5 d-none d-lg-block bg-dark text-white p-0 position-relative">
+              <div id="registerCarousel" class="carousel slide h-100" data-bs-ride="carousel">
+                <div class="carousel-inner h-100">
+                  <div class="carousel-item active h-100">
+                    <img src="../assets/images/slide-login/slide-login-1.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Slide 1">
+                    <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-75 p-4 rounded-3 m-3">
+                      <h4 class="fw-bold">Thành Viên TechZone</h4>
+                      <p class="small mb-0">Nhận ngay voucher giảm giá 50.000₫ cho đơn hàng đầu tiên và tích lũy điểm thưởng thành viên.</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item h-100">
+                    <img src="../assets/images/slide-login/slide-login-2.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Slide 2">
+                    <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-75 p-4 rounded-3 m-3">
+                      <h4 class="fw-bold">Bảo Hành & Đổi Mới</h4>
+                      <p class="small mb-0">Chính sách 1 đổi 1 trong 30 ngày cho các lỗi từ nhà sản xuất, bảo hành chính hãng toàn quốc.</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item h-100">
+                    <img src="../assets/images/slide-login/slide-login-3.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Slide 3">
+                    <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-75 p-4 rounded-3 m-3">
+                      <h4 class="fw-bold">Hỗ Trợ Nhanh Chóng</h4>
+                      <p class="small mb-0">Theo dõi trạng thái đơn hàng thời gian thực, quản lý lịch sử mua hàng dễ dàng.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Register Form -->
+            <div class="col-lg-7 p-4 p-md-5 bg-white d-flex flex-column justify-content-center">
+              <div class="mb-3 text-center text-lg-start">
+                <a href="../index.html" class="brand-logo text-decoration-none mb-2 d-inline-block">
+                  TechZone<span class="dot">.</span>
+                </a>
+                <h3 class="fw-bold text-dark">Tạo Tài Khoản Mới</h3>
+                <p class="text-muted small">Điền thông tin bên dưới để trải nghiệm mua sắm công nghệ tuyệt vời.</p>
+              </div>
+
+              <!-- Step 1: Registration Form -->
+              <form id="registerForm" onsubmit="handleRegisterSubmit(event)">
+                <div class="row g-3">
+                  <!-- Full Name -->
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold text-secondary">Họ và tên *</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light"><i class="bi bi-person text-muted"></i></span>
+                      <input type="text" class="form-control" id="reg-fullname" required placeholder="Nguyễn Văn A">
+                    </div>
+                  </div>
+
+                  <!-- Username -->
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold text-secondary">Tên đăng nhập *</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light"><i class="bi bi-at text-muted"></i></span>
+                      <input type="text" class="form-control" id="reg-username" required placeholder="username123">
+                    </div>
+                  </div>
+
+                  <!-- Email -->
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold text-secondary">Địa chỉ Email *</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light"><i class="bi bi-envelope text-muted"></i></span>
+                      <input type="email" class="form-control" id="reg-email" required placeholder="email@domain.com">
+                    </div>
+                  </div>
+
+                  <!-- Phone -->
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold text-secondary">Số điện thoại *</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light"><i class="bi bi-telephone text-muted"></i></span>
+                      <input type="tel" class="form-control" id="reg-phone" required placeholder="0901234567" pattern="[0-9]{10}">
+                    </div>
+                  </div>
+
+                  <!-- Password -->
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold text-secondary">Mật khẩu *</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light"><i class="bi bi-lock text-muted"></i></span>
+                      <input type="password" class="form-control" id="reg-password" required placeholder="Ít nhất 6 ký tự" minlength="6">
+                      <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('reg-password')">
+                        <i class="bi bi-eye" id="reg-password-eye"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Confirm Password -->
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold text-secondary">Xác nhận mật khẩu *</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light"><i class="bi bi-shield-check text-muted"></i></span>
+                      <input type="password" class="form-control" id="reg-confirm-password" required placeholder="Nhập lại mật khẩu" minlength="6">
+                      <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('reg-confirm-password')">
+                        <i class="bi bi-eye" id="reg-confirm-password-eye"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="form-check mt-3 mb-4">
+                  <input class="form-check-input" type="checkbox" id="agreeTerms" required checked>
+                  <label class="form-check-label small text-secondary" for="agreeTerms">
+                    Tôi đồng ý với <a href="#" class="text-primary text-decoration-none">Điều khoản sử dụng</a> và <a href="#" class="text-primary text-decoration-none">Chính sách bảo mật</a> của TechZone.
+                  </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold py-2 mb-3">
+                  Đăng Ký & Nhận Mã OTP
+                </button>
+
+                <div class="text-center text-muted small">
+                  Đã có tài khoản? <a href="login.html" class="text-primary fw-semibold text-decoration-none">Đăng nhập ngay</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTP Verification Modal (Simulating verify-register.jsp) -->
+  <div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="otpModalLabel">Xác Thực Mã OTP</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 text-center">
+          <div class="mb-3">
+            <div class="avatar-lg bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center p-3 mb-2" style="width: 64px; height: 64px;">
+              <i class="bi bi-shield-lock-fill fs-2"></i>
+            </div>
+            <p class="text-muted small">
+              Mã xác thực gồm 6 chữ số đã được gửi đến email <strong id="otpEmailTarget" class="text-dark"></strong>. Vui lòng nhập mã để hoàn tất đăng ký.
+            </p>
+            <div class="alert alert-info py-2 small">
+              <i class="bi bi-info-circle me-1"></i> Mã OTP mô phỏng: <strong class="badge bg-primary fs-6">123456</strong>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center gap-2 mb-3">
+            <input type="text" class="form-control text-center fs-4 fw-bold otp-digit" maxlength="1" style="width: 48px; height: 52px;" autofocus>
+            <input type="text" class="form-control text-center fs-4 fw-bold otp-digit" maxlength="1" style="width: 48px; height: 52px;">
+            <input type="text" class="form-control text-center fs-4 fw-bold otp-digit" maxlength="1" style="width: 48px; height: 52px;">
+            <input type="text" class="form-control text-center fs-4 fw-bold otp-digit" maxlength="1" style="width: 48px; height: 52px;">
+            <input type="text" class="form-control text-center fs-4 fw-bold otp-digit" maxlength="1" style="width: 48px; height: 52px;">
+            <input type="text" class="form-control text-center fs-4 fw-bold otp-digit" maxlength="1" style="width: 48px; height: 52px;">
+          </div>
+
+          <div class="text-muted small mb-3">
+            Gửi lại mã sau: <span id="countdownTimer" class="fw-bold text-danger">60</span>s
+            <button id="resendOtpBtn" class="btn btn-link btn-sm p-0 text-decoration-none d-none" onclick="resendOtp()">Gửi lại ngay</button>
+          </div>
+
+          <button type="button" class="btn btn-primary w-100 rounded-pill fw-bold py-2" onclick="verifyOtp()">
+            Xác Nhận & Hoàn Tất
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+
+  <script>
+    let countdownInterval;
+    let registeredUserData = null;
+
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      const eye = document.getElementById(inputId + "-eye");
+      if (input.type === "password") {
+        input.type = "text";
+        eye.classList.replace("bi-eye", "bi-eye-slash");
+      } else {
+        input.type = "password";
+        eye.classList.replace("bi-eye-slash", "bi-eye");
+      }
+    }
+
+    // Auto focus next OTP input box
+    const otpInputs = document.querySelectorAll(".otp-digit");
+    otpInputs.forEach((input, index) => {
+      input.addEventListener("input", (e) => {
+        if (e.target.value.length === 1 && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+      });
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && !e.target.value && index > 0) {
+          otpInputs[index - 1].focus();
+        }
+      });
+    });
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const fullname = document.getElementById("reg-fullname").value.trim();
+      const username = document.getElementById("reg-username").value.trim();
+      const email = document.getElementById("reg-email").value.trim();
+      const phone = document.getElementById("reg-phone").value.trim();
+      const password = document.getElementById("reg-password").value;
+      const confirmPassword = document.getElementById("reg-confirm-password").value;
+
+      if (password !== confirmPassword) {
+        showToast("Mật khẩu xác nhận không khớp!", "danger");
+        return;
+      }
+
+      registeredUserData = {
+        id: Date.now(),
+        fullname,
+        username,
+        email,
+        phone,
+        role: "USER"
+      };
+
+      document.getElementById("otpEmailTarget").innerText = email;
+      
+      // Open OTP modal
+      const otpModal = new bootstrap.Modal(document.getElementById("otpModal"));
+      otpModal.show();
+      startCountdown();
+    }
+
+    function startCountdown() {
+      let seconds = 60;
+      const timerSpan = document.getElementById("countdownTimer");
+      const resendBtn = document.getElementById("resendOtpBtn");
+      resendBtn.classList.add("d-none");
+      timerSpan.parentElement.classList.remove("d-none");
+
+      clearInterval(countdownInterval);
+      countdownInterval = setInterval(() => {
+        seconds--;
+        timerSpan.innerText = seconds;
+        if (seconds <= 0) {
+          clearInterval(countdownInterval);
+          resendBtn.classList.remove("d-none");
+        }
+      }, 1000);
+    }
+
+    function resendOtp() {
+      showToast("Đã gửi lại mã OTP tới email của bạn (Mã: 123456)", "info");
+      startCountdown();
+    }
+
+    function verifyOtp() {
+      let enteredCode = "";
+      otpInputs.forEach(input => enteredCode += input.value);
+
+      if (enteredCode === "123456" || enteredCode.length === 6) {
+        // Save user to localStorage session
+        setCurrentUser(registeredUserData);
+        showToast("Xác thực OTP thành công! Đăng ký tài khoản hoàn tất.", "success");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1000);
+      } else {
+        showToast("Mã OTP không chính xác! Vui lòng thử lại (Gợi ý: 123456)", "danger");
+      }
+    }
+  </script>
+</body>
+</html>

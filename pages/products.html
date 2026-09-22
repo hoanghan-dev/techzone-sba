@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh Sách Sản Phẩm - TechZone</title>
+  <meta name="description" content="Khám phá các dòng Laptop, Điện thoại, Phụ kiện công nghệ chính hãng với bộ lọc đa tiêu chí và mức giá ưu đãi tại TechZone.">
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <span><i class="bi bi-headset me-1"></i> Hotline: <strong>0916 973 161</strong></span>
+        <span><i class="bi bi-envelope me-1"></i> support@techzone.vn</span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <a href="../admin/dashboard.html" class="text-decoration-none"><i class="bi bi-shield-lock me-1"></i> Admin Portal</a>
+        <span>|</span>
+        <a href="orders.html" class="text-decoration-none"><i class="bi bi-truck me-1"></i> Tra cứu đơn hàng</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="navbar-main d-flex justify-content-between align-items-center gap-3">
+        <a href="../index.html" class="brand-logo text-decoration-none">
+          TechZone<span class="dot">.</span>
+        </a>
+
+        <!-- Search Form -->
+        <div class="header-search flex-grow-1 mx-md-4">
+          <form action="products.html" method="GET">
+            <div class="input-group">
+              <input type="text" name="txtSearch" class="form-control" placeholder="Tìm kiếm laptop, điện thoại, phụ kiện..." aria-label="Search" required>
+              <button class="btn btn-search" type="submit">
+                <i class="bi bi-search fs-6"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Actions -->
+        <div class="nav-actions">
+          <div id="user-auth-menu"></div>
+          <a href="cart.html" class="nav-action-btn cart-badge-icon text-decoration-none">
+            <i class="bi bi-cart3 fs-4"></i>
+            <span class="cart-counter" style="display: none;">0</span>
+            <span class="d-none d-lg-inline">Giỏ hàng</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Catalog Content -->
+  <main class="py-4">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb small">
+          <li class="breadcrumb-item"><a href="../index.html">Trang chủ</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Sản phẩm</li>
+        </ol>
+      </nav>
+
+      <!-- Category Pills Filter Bar -->
+      <div class="d-flex gap-2 overflow-x-auto pb-3 mb-4" id="category-pills">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="row g-4">
+        <!-- Desktop Filter Sidebar -->
+        <div class="col-lg-3 d-none d-lg-block">
+          <div class="filter-sidebar sticky-top" style="top: 90px;">
+            <div class="filter-header">
+              <h5 class="fw-bold mb-0"><i class="bi bi-funnel me-2 text-primary"></i>Bộ Lọc Tìm Kiếm</h5>
+              <button class="btn btn-link btn-sm text-danger text-decoration-none p-0" onclick="resetAllFilters()">
+                Đặt lại
+              </button>
+            </div>
+
+            <!-- In-stock filter -->
+            <div class="filter-group">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="in-stock-only">
+                <label class="form-check-label fw-semibold" for="in-stock-only">Chỉ hiện còn hàng</label>
+              </div>
+            </div>
+
+            <!-- Brand Filter -->
+            <div class="filter-group">
+              <h6 class="filter-group-title">Thương Hiệu</h6>
+              <div id="brand-filter-list" class="overflow-y-auto" style="max-height: 220px;">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="filter-group">
+              <h6 class="filter-group-title">Mức Giá</h6>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="priceRange" value="all" id="price-all" checked>
+                <label class="form-check-label" for="price-all">Tất cả mức giá</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="priceRange" value="under-5m" id="price-u5m">
+                <label class="form-check-label" for="price-u5m">Dưới 5 triệu</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="priceRange" value="5m-15m" id="price-5-15m">
+                <label class="form-check-label" for="price-5-15m">5 triệu - 15 triệu</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="priceRange" value="15m-30m" id="price-15-30m">
+                <label class="form-check-label" for="price-15-30m">15 triệu - 30 triệu</label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="priceRange" value="over-30m" id="price-o30m">
+                <label class="form-check-label" for="price-o30m">Trên 30 triệu</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Grid & Controls -->
+        <div class="col-lg-9">
+          <!-- Top Bar: Result count & Sort Dropdown -->
+          <div class="d-flex justify-content-between align-items-center bg-white p-3 rounded-3 border mb-3">
+            <div>
+              <span class="fw-semibold text-dark" id="search-results-count">Đang tải sản phẩm...</span>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <!-- Mobile Filter Trigger -->
+              <button class="btn btn-outline-secondary btn-sm d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileFilterDrawer">
+                <i class="bi bi-funnel me-1"></i>Bộ lọc
+              </button>
+
+              <label for="sort-select" class="small text-muted d-none d-sm-inline">Sắp xếp theo:</label>
+              <select class="form-select form-select-sm" id="sort-select" style="width: auto;">
+                <option value="featured">Nổi bật nhất</option>
+                <option value="price-asc">Giá: Thấp đến Cao</option>
+                <option value="price-desc">Giá: Cao đến Thấp</option>
+                <option value="rating">Đánh giá cao nhất</option>
+                <option value="newest">Mới nhất</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Active Filter Tags -->
+          <div class="d-flex flex-wrap gap-2 mb-3" id="active-filters-bar" style="display: none !important;">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Product Grid -->
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 g-md-4" id="products-catalog-grid">
+            <!-- Rendered dynamically by JS -->
+          </div>
+
+          <!-- Pagination -->
+          <nav aria-label="Catalog pagination" class="mt-5">
+            <ul class="pagination justify-content-center" id="catalog-pagination">
+              <!-- Rendered by JS -->
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Filter Offcanvas Drawer -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileFilterDrawer" aria-labelledby="mobileFilterLabel">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title fw-bold" id="mobileFilterLabel"><i class="bi bi-funnel me-2"></i>Bộ Lọc Sản Phẩm</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <!-- Replicated Filter Controls for Mobile -->
+      <div class="mb-4">
+        <h6 class="fw-bold mb-2">Tình Trạng</h6>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="mobile-in-stock-only" onchange="document.getElementById('in-stock-only').checked = this.checked; currentFilterState.inStockOnly = this.checked; applyFiltersAndRender();">
+          <label class="form-check-label" for="mobile-in-stock-only">Chỉ hiện còn hàng</label>
+        </div>
+      </div>
+      <div class="d-grid gap-2 mt-4">
+        <button class="btn btn-primary" data-bs-dismiss="offcanvas" onclick="applyFiltersAndRender()">Áp dụng bộ lọc</button>
+        <button class="btn btn-outline-secondary" data-bs-dismiss="offcanvas" onclick="resetAllFilters()">Xóa bộ lọc</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container text-center text-secondary small">
+      © 2026 TechZone. All rights reserved. Bản quyền thuộc về PRJ301_SE1910_G6.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/products.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      initCatalogPage();
+    });
+  </script>
+</body>
+</html>

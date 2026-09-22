@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Đơn Hàng - TechZone Admin</title>
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="bg-light">
+
+  <div class="admin-layout d-flex min-vh-100">
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar bg-dark text-white p-3 d-flex flex-column justify-content-between" style="width: 260px; min-height: 100vh;">
+      <div>
+        <div class="d-flex align-items-center justify-content-between px-2 py-3 mb-4 border-bottom border-secondary border-opacity-25">
+          <a href="dashboard.html" class="brand-logo text-white text-decoration-none fs-4">
+            TechZone<span class="dot">.</span> <span class="badge bg-primary fs-6 fw-normal ms-1">Admin</span>
+          </a>
+        </div>
+
+        <nav class="nav flex-column gap-1">
+          <a href="dashboard.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-grid-1x2-fill"></i> Tổng Quan
+          </a>
+          <a href="products.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-box-seam-fill"></i> Quản Lý Sản Phẩm
+          </a>
+          <a href="orders.html" class="nav-link text-white active bg-primary rounded-3 px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-receipt"></i> Quản Lý Đơn Hàng
+          </a>
+          <a href="vouchers.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-ticket-perforated-fill"></i> Mã Giảm Giá
+          </a>
+          <a href="users.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-people-fill"></i> Tài Khoản Người Dùng
+          </a>
+          <a href="feedback.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+            <i class="bi bi-chat-left-text-fill"></i> Đánh Giá & Phản Hồi
+          </a>
+        </nav>
+      </div>
+
+      <div class="border-top border-secondary border-opacity-25 pt-3">
+        <a href="../index.html" class="nav-link text-white-50 hover-white px-3 py-2 d-flex align-items-center gap-3">
+          <i class="bi bi-shop"></i> Xem Cửa Hàng
+        </a>
+        <a href="javascript:void(0)" onclick="logout()" class="nav-link text-danger px-3 py-2 d-flex align-items-center gap-3">
+          <i class="bi bi-box-arrow-right"></i> Đăng Xuất
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1 p-3 p-md-4 overflow-auto">
+      <!-- Header Bar -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 bg-white p-3 rounded-4 shadow-sm">
+        <div>
+          <h4 class="fw-bold mb-0">Quản Lý Đơn Hàng & Giao Nhận</h4>
+          <span class="text-muted small">Theo dõi, xác nhận đơn hàng và cập nhật tiến trình vận chuyển</span>
+        </div>
+      </div>
+
+      <!-- Filters & Status Tabs -->
+      <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
+        <div class="row g-3 align-items-center">
+          <div class="col-lg-5">
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+              <input type="text" id="adminOrderSearch" class="form-control border-start-0" placeholder="Tìm theo mã đơn (#TZ...), tên khách hàng, số điện thoại..." oninput="filterAdminOrders()">
+            </div>
+          </div>
+          <div class="col-lg-7">
+            <div class="nav nav-pills nav-fill bg-light p-1 rounded-pill small" id="orderStatusTabs">
+              <button class="nav-link active rounded-pill py-1 fw-semibold" onclick="setAdminStatusFilter('ALL', this)">Tất cả</button>
+              <button class="nav-link rounded-pill py-1 fw-semibold" onclick="setAdminStatusFilter('PROCESSING', this)">Chờ xác nhận</button>
+              <button class="nav-link rounded-pill py-1 fw-semibold" onclick="setAdminStatusFilter('PENDING', this)">Đang giao</button>
+              <button class="nav-link rounded-pill py-1 fw-semibold" onclick="setAdminStatusFilter('COMPLETED', this)">Hoàn thành</button>
+              <button class="nav-link rounded-pill py-1 fw-semibold" onclick="setAdminStatusFilter('CANCELED', this)">Đã hủy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Table -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light small">
+              <tr>
+                <th>MÃ ĐƠN</th>
+                <th>KHÁCH HÀNG</th>
+                <th>NGÀY ĐẶT</th>
+                <th>SỐ SẢN PHẨM</th>
+                <th>TỔNG TIỀN</th>
+                <th>HÌNH THỨC</th>
+                <th>TRẠNG THÁI</th>
+                <th class="text-end">THAO TÁC</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersTableBody" class="small">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Order Detail Modal -->
+  <div class="modal fade" id="orderDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="orderModalTitle">Chi Tiết Đơn Hàng #TZ-1001</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4" id="orderModalContent">
+          <!-- Populated by JS -->
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Reason Modal -->
+  <div class="modal fade" id="cancelReasonModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold text-danger">Hủy Đơn Hàng</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <p class="small text-muted mb-3">Vui lòng nhập lý do hủy đơn hàng để lưu lại vào lịch sử kiểm toán.</p>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Lý do hủy đơn *</label>
+            <select class="form-select mb-2" id="cancelReasonSelect" onchange="checkCustomReason(this)">
+              <option value="Khách hàng yêu cầu hủy đơn">Khách hàng yêu cầu hủy đơn</option>
+              <option value="Hết hàng tồn kho trong kho tổng">Hết hàng tồn kho trong kho tổng</option>
+              <option value="Không liên lạc được với người nhận sau 3 lần gọi">Không liên lạc được với người nhận sau 3 lần gọi</option>
+              <option value="Địa chỉ giao hàng không hợp lệ">Địa chỉ giao hàng không hợp lệ</option>
+              <option value="other">Lý do khác...</option>
+            </select>
+            <textarea class="form-control d-none" id="customCancelReason" rows="2" placeholder="Nhập lý do cụ thể..."></textarea>
+          </div>
+          <button type="button" class="btn btn-danger w-100 rounded-pill fw-bold" onclick="submitOrderCancellation()">
+            Xác Nhận Hủy Đơn Hàng
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+
+  <script>
+    let allOrders = [];
+    let currentStatusFilter = "ALL";
+    let orderToCancelId = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      allOrders = getSavedOrders();
+      renderAdminOrders();
+
+      // Check URL param for direct modal view
+      const urlParams = new URLSearchParams(window.location.search);
+      const idParam = urlParams.get("id");
+      if (idParam) {
+        viewAdminOrderDetail(idParam);
+      }
+    });
+
+    function setAdminStatusFilter(status, btn) {
+      currentStatusFilter = status;
+      document.querySelectorAll("#orderStatusTabs .nav-link").forEach(l => l.classList.remove("active"));
+      btn.classList.add("active");
+      renderAdminOrders();
+    }
+
+    function filterAdminOrders() {
+      renderAdminOrders();
+    }
+
+    function renderAdminOrders() {
+      const search = document.getElementById("adminOrderSearch").value.trim().toLowerCase();
+      const tbody = document.getElementById("adminOrdersTableBody");
+
+      const filtered = allOrders.filter(o => {
+        const matchesStatus = currentStatusFilter === "ALL" || o.status === currentStatusFilter;
+        const matchesSearch = !search || o.id.toLowerCase().includes(search) || o.customerName.toLowerCase().includes(search) || o.phone.includes(search);
+        return matchesStatus && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              Không tìm thấy đơn hàng nào phù hợp.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(order => {
+        let badgeClass = "bg-warning text-dark";
+        let statusText = "Chờ Xác Nhận";
+        if (order.status === "PENDING") {
+          badgeClass = "bg-info text-white";
+          statusText = "Đang Giao Hàng";
+        } else if (order.status === "COMPLETED") {
+          badgeClass = "bg-success text-white";
+          statusText = "Đã Hoàn Thành";
+        } else if (order.status === "CANCELED") {
+          badgeClass = "bg-danger text-white";
+          statusText = "Đã Hủy";
+        }
+
+        const totalItemsCount = order.items.reduce((acc, i) => acc + i.quantity, 0);
+
+        return `
+          <tr>
+            <td class="fw-bold text-primary">#${order.id}</td>
+            <td>
+              <div class="fw-semibold text-dark">${order.customerName}</div>
+              <div class="text-muted" style="font-size: 0.75rem;">${order.phone}</div>
+            </td>
+            <td>${order.createdAt}</td>
+            <td>${totalItemsCount} sản phẩm</td>
+            <td class="fw-bold text-dark">${formatVND(order.totalAmount)}</td>
+            <td><span class="badge bg-light text-secondary border">${order.paymentMethod}</span></td>
+            <td><span class="badge ${badgeClass} rounded-pill">${statusText}</span></td>
+            <td class="text-end">
+              <div class="d-inline-flex gap-1">
+                <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="viewAdminOrderDetail('${order.id}')">
+                  Chi Tiết
+                </button>
+                <div class="dropdown">
+                  <button class="btn btn-sm btn-light rounded-pill px-2" data-bs-toggle="dropdown">
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 small">
+                    ${order.status === "PROCESSING" ? `
+                      <li><a class="dropdown-item text-info fw-semibold" href="javascript:void(0)" onclick="updateOrderStatus('${order.id}', 'PENDING')"><i class="bi bi-truck me-2"></i>Duyệt & Giao hàng (PENDING)</a></li>
+                    ` : ""}
+                    ${order.status === "PENDING" ? `
+                      <li><a class="dropdown-item text-success fw-semibold" href="javascript:void(0)" onclick="updateOrderStatus('${order.id}', 'COMPLETED')"><i class="bi bi-check2-all me-2"></i>Xác nhận Giao thành công (COMPLETED)</a></li>
+                    ` : ""}
+                    ${order.status !== "COMPLETED" && order.status !== "CANCELED" ? `
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="openCancelModal('${order.id}')"><i class="bi bi-x-circle me-2"></i>Hủy đơn hàng này</a></li>
+                    ` : ""}
+                  </ul>
+                </div>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function viewAdminOrderDetail(id) {
+      const order = allOrders.find(o => o.id === id);
+      if (!order) return;
+
+      document.getElementById("orderModalTitle").innerText = `Chi Tiết Đơn Hàng #${order.id}`;
+
+      let itemsHtml = order.items.map(item => `
+        <div class="d-flex align-items-center justify-content-between p-2 border-bottom">
+          <div class="d-flex align-items-center gap-3">
+            <img src="../${item.image}" class="rounded border p-1" width="48" height="48" style="object-fit: contain;">
+            <div>
+              <div class="fw-semibold text-dark">${item.name}</div>
+              <div class="text-muted small">${formatVND(item.price)} × ${item.quantity}</div>
+            </div>
+          </div>
+          <div class="fw-bold text-dark">${formatVND(item.price * item.quantity)}</div>
+        </div>
+      `).join("");
+
+      document.getElementById("orderModalContent").innerHTML = `
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3">
+              <h6 class="fw-bold mb-2 text-dark"><i class="bi bi-person-fill text-primary me-2"></i>Thông Tin Người Nhận</h6>
+              <div class="small"><strong>Người nhận:</strong> ${order.customerName}</div>
+              <div class="small"><strong>Số điện thoại:</strong> ${order.phone}</div>
+              <div class="small"><strong>Địa chỉ giao:</strong> ${order.shippingAddress}</div>
+              ${order.notes ? `<div class="small text-muted mt-1"><strong>Ghi chú:</strong> "${order.notes}"</div>` : ""}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3">
+              <h6 class="fw-bold mb-2 text-dark"><i class="bi bi-receipt text-primary me-2"></i>Thông Tin Đơn Hàng</h6>
+              <div class="small"><strong>Mã đơn hàng:</strong> #${order.id}</div>
+              <div class="small"><strong>Ngày đặt:</strong> ${order.createdAt}</div>
+              <div class="small"><strong>Hình thức:</strong> ${order.paymentMethod}</div>
+              <div class="small"><strong>Trạng thái:</strong> <span class="badge bg-primary">${order.status}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <h6 class="fw-bold mb-2">Danh Sách Sản Phẩm</h6>
+        <div class="mb-4">${itemsHtml}</div>
+
+        <div class="bg-light p-3 rounded-3">
+          <div class="d-flex justify-content-between small mb-1">
+            <span class="text-muted">Tạm tính hàng hóa:</span>
+            <span>${formatVND(order.subtotal)}</span>
+          </div>
+          <div class="d-flex justify-content-between small mb-1">
+            <span class="text-muted">Phí vận chuyển:</span>
+            <span>${formatVND(order.shippingFee)}</span>
+          </div>
+          ${order.discountAmount > 0 ? `
+            <div class="d-flex justify-content-between small mb-1 text-success">
+              <span>Giảm giá voucher:</span>
+              <span>-${formatVND(order.discountAmount)}</span>
+            </div>
+          ` : ""}
+          <div class="d-flex justify-content-between fw-bold fs-5 text-primary border-top pt-2 mt-2">
+            <span>Tổng số tiền:</span>
+            <span>${formatVND(order.totalAmount)}</span>
+          </div>
+        </div>
+      `;
+
+      const modal = new bootstrap.Modal(document.getElementById("orderDetailModal"));
+      modal.show();
+    }
+
+    function updateOrderStatus(id, newStatus) {
+      const order = allOrders.find(o => o.id === id);
+      if (!order) return;
+
+      order.status = newStatus;
+      saveOrders(allOrders);
+      showToast(`Đã cập nhật trạng thái đơn #${order.id} sang ${newStatus}!`, "success");
+      renderAdminOrders();
+    }
+
+    function openCancelModal(id) {
+      orderToCancelId = id;
+      const modal = new bootstrap.Modal(document.getElementById("cancelReasonModal"));
+      modal.show();
+    }
+
+    function checkCustomReason(select) {
+      const customInput = document.getElementById("customCancelReason");
+      if (select.value === "other") {
+        customInput.classList.remove("d-none");
+        customInput.focus();
+      } else {
+        customInput.classList.add("d-none");
+      }
+    }
+
+    function submitOrderCancellation() {
+      if (!orderToCancelId) return;
+      const select = document.getElementById("cancelReasonSelect");
+      const custom = document.getElementById("customCancelReason");
+      const reason = select.value === "other" ? custom.value.trim() : select.value;
+
+      if (!reason) {
+        showToast("Vui lòng nêu rõ lý do hủy đơn!", "warning");
+        return;
+      }
+
+      const order = allOrders.find(o => o.id === orderToCancelId);
+      if (order) {
+        order.status = "CANCELED";
+        order.cancelReason = reason;
+        saveOrders(allOrders);
+        showToast(`Đơn hàng #${order.id} đã được hủy. Lý do: ${reason}`, "info");
+      }
+
+      bootstrap.Modal.getInstance(document.getElementById("cancelReasonModal")).hide();
+      renderAdminOrders();
+    }
+  </script>
+</body>
+</html>

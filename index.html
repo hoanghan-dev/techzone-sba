@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechZone - Siêu Thị Công Nghệ & Thiết Bị Số Hiện Đại</title>
+  <meta name="description" content="TechZone chuyên cung cấp Laptop, Smartphone, Phụ kiện công nghệ chính hãng với giá tốt nhất cùng nhiều ưu đãi hấp dẫn.">
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Utility Bar -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <span><i class="bi bi-headset me-1"></i> Hotline: <strong>0916 973 161</strong></span>
+        <span><i class="bi bi-envelope me-1"></i> support@techzone.vn</span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <a href="admin/dashboard.html" class="text-decoration-none"><i class="bi bi-shield-lock me-1"></i> Admin Portal</a>
+        <span>|</span>
+        <a href="pages/orders.html" class="text-decoration-none"><i class="bi bi-truck me-1"></i> Tra cứu đơn hàng</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="navbar-main d-flex justify-content-between align-items-center gap-3">
+        <!-- Logo -->
+        <a href="index.html" class="brand-logo text-decoration-none">
+          TechZone<span class="dot">.</span>
+        </a>
+
+        <!-- Category Dropdown & Search -->
+        <div class="d-flex align-items-center flex-grow-1 justify-content-center gap-3">
+          <div class="dropdown d-none d-md-block">
+            <button class="btn btn-categories dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-grid-fill"></i>
+              <span>Danh mục</span>
+            </button>
+            <ul class="dropdown-menu shadow-sm border-0 mt-2">
+              <li><a class="dropdown-item py-2" href="pages/products.html?category=phone"><i class="bi bi-phone me-2 text-primary"></i>Điện thoại & Tablet</a></li>
+              <li><a class="dropdown-item py-2" href="pages/products.html?category=laptop"><i class="bi bi-laptop me-2 text-primary"></i>Laptops & Máy tính</a></li>
+              <li><a class="dropdown-item py-2" href="pages/products.html?category=accessory"><i class="bi bi-headphones me-2 text-primary"></i>Phụ kiện & Âm thanh</a></li>
+            </ul>
+          </div>
+
+          <!-- Search Form -->
+          <div class="header-search flex-grow-1">
+            <form action="pages/products.html" method="GET">
+              <div class="input-group">
+                <input type="text" name="txtSearch" class="form-control" placeholder="Tìm kiếm laptop, điện thoại, phụ kiện..." aria-label="Search" required>
+                <button class="btn btn-search" type="submit">
+                  <i class="bi bi-search fs-6"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- User & Cart Actions -->
+        <div class="nav-actions">
+          <div id="user-auth-menu"></div>
+
+          <a href="pages/cart.html" class="nav-action-btn cart-badge-icon text-decoration-none">
+            <i class="bi bi-cart3 fs-4"></i>
+            <span class="cart-counter" style="display: none;">0</span>
+            <span class="d-none d-lg-inline">Giỏ hàng</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secondary Nav Bar -->
+    <nav class="secondary-nav d-none d-lg-block">
+      <div class="container d-flex justify-content-between align-items-center">
+        <ul class="nav">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Trang chủ</a></li>
+          <li class="nav-item"><a class="nav-link" href="pages/products.html?category=phone">Smartphones</a></li>
+          <li class="nav-item"><a class="nav-link" href="pages/products.html?category=laptop">Laptops</a></li>
+          <li class="nav-item"><a class="nav-link" href="pages/products.html?category=accessory">Phụ kiện</a></li>
+          <li class="nav-item"><a class="nav-link" href="pages/products.html">Tất cả sản phẩm</a></li>
+        </ul>
+        <div class="text-secondary small fw-semibold">
+          <i class="bi bi-shield-check text-success me-1"></i> Cam kết 100% chính hãng
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section py-4">
+    <div class="container">
+      <div id="mainCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active"></button>
+          <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1"></button>
+          <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner">
+          <!-- Slide 1 -->
+          <div class="carousel-item active">
+            <div class="hero-banner-item">
+              <div class="row align-items-center w-100">
+                <div class="col-md-7">
+                  <span class="badge bg-danger px-3 py-2 rounded-pill fw-bold text-uppercase mb-3">Siêu phẩm công nghệ 2026</span>
+                  <h1 class="hero-banner-title">iPhone 15 Pro Max<br>Titanium Siêu Bền Nhẹ</h1>
+                  <p class="hero-banner-subtitle">Chip A17 Pro đỉnh cao, camera tiềm vọng quang học 5x. Ưu đãi giảm ngay tới 5.500.000₫ và hỗ trợ trả góp 0%.</p>
+                  <a href="pages/product-detail.html?id=6" class="btn btn-primary btn-lg px-4 py-2 rounded-pill fw-bold">
+                    Khám phá ngay <i class="bi bi-arrow-right ms-2"></i>
+                  </a>
+                </div>
+                <div class="col-md-5 text-center d-none d-md-block">
+                  <img src="assets/images/phones/iphone_01.jpg" alt="iPhone 15 Pro Max" class="img-fluid rounded-4 shadow-lg mx-auto" style="max-height: 320px; object-fit: contain;">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="carousel-item">
+            <div class="hero-banner-item" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);">
+              <div class="row align-items-center w-100">
+                <div class="col-md-7">
+                  <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold text-uppercase mb-3">Gaming Đỉnh Cao</span>
+                  <h1 class="hero-banner-title">Acer Predator Helios 16<br>Vũ Khí Game Thủ</h1>
+                  <p class="hero-banner-subtitle">Màn hình 240Hz chuẩn màu, RTX 4070 8GB cùng hệ thống tản nhiệt quạt kim loại AeroBlade 3D thế hệ 5.</p>
+                  <a href="pages/product-detail.html?id=1" class="btn btn-warning btn-lg px-4 py-2 rounded-pill fw-bold">
+                    Xem cấu hình <i class="bi bi-arrow-right ms-2"></i>
+                  </a>
+                </div>
+                <div class="col-md-5 text-center d-none d-md-block">
+                  <img src="assets/images/laptops/acer_01.jpg" alt="Acer Predator Helios" class="img-fluid rounded-4 shadow-lg mx-auto" style="max-height: 320px; object-fit: contain;">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="carousel-item">
+            <div class="hero-banner-item" style="background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);">
+              <div class="row align-items-center w-100">
+                <div class="col-md-7">
+                  <span class="badge bg-success px-3 py-2 rounded-pill fw-bold text-uppercase mb-3">Âm Thanh Hi-Res</span>
+                  <h1 class="hero-banner-title">Sony WH-1000XM5<br>Chống Ồn Tuyệt Đỉnh</h1>
+                  <p class="hero-banner-subtitle">Trải nghiệm không gian âm nhạc tĩnh lặng chuẩn phòng thu với 8 micro và 2 bộ xử lý chống ồn thông minh.</p>
+                  <a href="pages/product-detail.html?id=11" class="btn btn-light btn-lg px-4 py-2 rounded-pill fw-bold">
+                    Mua ngay <i class="bi bi-arrow-right ms-2"></i>
+                  </a>
+                </div>
+                <div class="col-md-5 text-center d-none d-md-block">
+                  <img src="assets/images/accessories/sony_headset_01.jpg" alt="Sony WH-1000XM5" class="img-fluid rounded-4 shadow-lg mx-auto" style="max-height: 320px; object-fit: contain;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Showcase -->
+  <section class="categories-section py-5">
+    <div class="container">
+      <div class="text-center mb-4">
+        <h2 class="section-title">Danh Mục Sản Phẩm</h2>
+        <p class="section-subtitle">Lựa chọn các dòng thiết bị công nghệ chính hãng hàng đầu</p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <!-- Phones -->
+        <div class="col-md-4">
+          <a href="pages/products.html?category=phone" class="text-decoration-none">
+            <div class="category-card h-100">
+              <div class="cat-img-wrapper">
+                <img src="assets/images/phones/iphone_01.jpg" alt="Smartphones">
+              </div>
+              <h4>Điện Thoại & Tablet</h4>
+              <span class="cat-count">iPhone, Samsung, OPPO</span>
+            </div>
+          </a>
+        </div>
+        <!-- Laptops -->
+        <div class="col-md-4">
+          <a href="pages/products.html?category=laptop" class="text-decoration-none">
+            <div class="category-card h-100">
+              <div class="cat-img-wrapper">
+                <img src="assets/images/laptops/acer_01.jpg" alt="Laptops">
+              </div>
+              <h4>Laptops & Máy Tính</h4>
+              <span class="cat-count">Acer, Lenovo Legion, MSI, ASUS TUF</span>
+            </div>
+          </a>
+        </div>
+        <!-- Accessories -->
+        <div class="col-md-4">
+          <a href="pages/products.html?category=accessory" class="text-decoration-none">
+            <div class="category-card h-100">
+              <div class="cat-img-wrapper">
+                <img src="assets/images/accessories/anker_charger_04.jpg" alt="Accessories">
+              </div>
+              <h4>Phụ Kiện & Âm Thanh</h4>
+              <span class="cat-count">Anker, Sony, Logitech, WD, Seagate, Baseus</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products Section -->
+  <section class="featured-section py-5 bg-white">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+          <h2 class="section-title">Sản Phẩm Nổi Bật</h2>
+          <p class="section-subtitle mb-0">Các sản phẩm được quan tâm nhiều nhất trong tháng</p>
+        </div>
+        <a href="pages/products.html" class="text-primary fw-semibold text-decoration-none">
+          Xem tất cả <i class="bi bi-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="home-featured-grid">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Behavior Recommendations (Replicating customer-behavior.jsp) -->
+  <section class="recommended-section py-5 bg-light">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <i class="bi bi-magic text-primary fs-4"></i>
+            <h2 class="section-title mb-0">Gợi Ý Dành Riêng Cho Bạn</h2>
+          </div>
+          <p class="section-subtitle mb-0">Dựa trên lịch sử quan tâm và sở thích mua sắm của bạn</p>
+        </div>
+        <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">Đã cá nhân hóa</span>
+      </div>
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="home-recommended-grid">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending Products Section -->
+  <section class="trending-section py-5 bg-white">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+          <h2 class="section-title">Sản Phẩm Đang Thịnh Hành</h2>
+          <p class="section-subtitle mb-0">Top thiết bị công nghệ bán chạy nhất tại TechZone</p>
+        </div>
+        <a href="pages/products.html" class="text-primary fw-semibold text-decoration-none">
+          Xem tất cả <i class="bi bi-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="home-trending-grid">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Promotional Voucher Banner -->
+  <section class="voucher-promo-section py-4">
+    <div class="container">
+      <div class="card bg-primary text-white border-0 rounded-4 overflow-hidden shadow-lg p-4 p-md-5">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-2">Ưu đãi độc quyền</span>
+            <h3 class="fw-bold fs-2 mb-2">Nhập mã TECHZONE10 giảm ngay 10%</h3>
+            <p class="mb-0 text-white-50 fs-6">Áp dụng cho mọi đơn hàng phụ kiện và thiết bị số từ 500.000₫. Miễn phí đổi trả 30 ngày.</p>
+          </div>
+          <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+            <button class="btn btn-light btn-lg px-4 py-2 rounded-pill fw-bold text-primary" onclick="copyVoucherCode('TECHZONE10')">
+              <i class="bi bi-clipboard-check me-2"></i>Sao chép mã
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Col 1 -->
+        <div class="col-lg-4">
+          <h4 class="fw-bold mb-3">TechZone<span class="text-primary">.</span></h4>
+          <p class="text-secondary small mb-3">
+            Hệ thống siêu thị bán lẻ laptop, điện thoại và phụ kiện công nghệ hàng đầu. Luôn tiên phong về chất lượng dịch vụ và chế độ hậu mãi chu đáo.
+          </p>
+          <div class="text-secondary small">
+            <p class="mb-1"><i class="bi bi-geo-alt me-2"></i>Khu Công nghệ cao, TP. Thủ Đức, TP. Hồ Chí Minh</p>
+            <p class="mb-1"><i class="bi bi-telephone me-2"></i>0916 973 161</p>
+            <p class="mb-0"><i class="bi bi-envelope me-2"></i>support@techzone.vn</p>
+          </div>
+        </div>
+
+        <!-- Col 2 -->
+        <div class="col-lg-2 col-md-4">
+          <h6 class="fw-bold mb-3 text-uppercase">Danh mục</h6>
+          <ul class="list-unstyled text-secondary small">
+            <li class="mb-2"><a href="pages/products.html?category=phone" class="text-secondary text-decoration-none">Điện thoại iPhone</a></li>
+            <li class="mb-2"><a href="pages/products.html?category=phone" class="text-secondary text-decoration-none">Samsung Galaxy</a></li>
+            <li class="mb-2"><a href="pages/products.html?category=laptop" class="text-secondary text-decoration-none">Laptop Gaming</a></li>
+            <li class="mb-2"><a href="pages/products.html?category=accessory" class="text-secondary text-decoration-none">Tai nghe chống ồn</a></li>
+            <li class="mb-2"><a href="pages/products.html?category=accessory" class="text-secondary text-decoration-none">Củ sạc nhanh GaN</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3 -->
+        <div class="col-lg-3 col-md-4">
+          <h6 class="fw-bold mb-3 text-uppercase">Chính sách & Hỗ trợ</h6>
+          <ul class="list-unstyled text-secondary small">
+            <li class="mb-2"><a href="#" class="text-secondary text-decoration-none">Chính sách bảo hành 12 tháng</a></li>
+            <li class="mb-2"><a href="#" class="text-secondary text-decoration-none">Chính sách đổi trả trong 30 ngày</a></li>
+            <li class="mb-2"><a href="#" class="text-secondary text-decoration-none">Chính sách giao hàng toàn quốc</a></li>
+            <li class="mb-2"><a href="#" class="text-secondary text-decoration-none">Hướng dẫn thanh toán COD & Bank</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4 -->
+        <div class="col-lg-3 col-md-4">
+          <h6 class="fw-bold mb-3 text-uppercase">Phương thức thanh toán</h6>
+          <div class="d-flex gap-2 flex-wrap text-secondary mb-3">
+            <span class="badge bg-secondary p-2"><i class="bi bi-cash me-1"></i>Tiền mặt (COD)</span>
+            <span class="badge bg-secondary p-2"><i class="bi bi-bank me-1"></i>Chuyển khoản Ngân hàng</span>
+          </div>
+          <h6 class="fw-bold mb-2 text-uppercase">Đăng ký nhận tin</h6>
+          <div class="input-group">
+            <input type="email" class="form-control form-control-sm" placeholder="Nhập email...">
+            <button class="btn btn-primary btn-sm" type="button">Gửi</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-secondary my-4">
+      <div class="text-center text-secondary small">
+        © 2026 TechZone. All rights reserved. Bản quyền thuộc về PRJ301_SE1910_G6.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/products.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Render Featured Products (Top 4)
+      const featuredGrid = document.getElementById("home-featured-grid");
+      if (featuredGrid) {
+        const featuredProducts = PRODUCTS.slice(0, 4);
+        featuredGrid.innerHTML = featuredProducts.map(p => createProductCardHTML(p, "")).join("");
+      }
+
+      // Render Recommended Products (Customer Behavior demo)
+      const recommendedGrid = document.getElementById("home-recommended-grid");
+      if (recommendedGrid) {
+        const recommendedProducts = [PRODUCTS[5], PRODUCTS[0], PRODUCTS[9], PRODUCTS[10]];
+        recommendedGrid.innerHTML = recommendedProducts.map(p => createProductCardHTML(p, "")).join("");
+      }
+
+      // Render Trending Products
+      const trendingGrid = document.getElementById("home-trending-grid");
+      if (trendingGrid) {
+        const trendingProducts = [PRODUCTS[1], PRODUCTS[6], PRODUCTS[11], PRODUCTS[2]];
+        trendingGrid.innerHTML = trendingProducts.map(p => createProductCardHTML(p, "")).join("");
+      }
+    });
+
+    function copyVoucherCode(code) {
+      navigator.clipboard.writeText(code).then(() => {
+        showToast(`Đã sao chép mã voucher <b>${code}</b>!`, "success");
+      });
+    }
+  </script>
+</body>
+</html>

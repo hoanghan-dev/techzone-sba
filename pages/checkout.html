@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh Toán Đơn Hàng - TechZone</title>
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <span><i class="bi bi-headset me-1"></i> Hotline: <strong>0916 973 161</strong></span>
+        <span><i class="bi bi-envelope me-1"></i> support@techzone.vn</span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <a href="orders.html" class="text-decoration-none"><i class="bi bi-truck me-1"></i> Tra cứu đơn hàng</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="navbar-main d-flex justify-content-between align-items-center">
+        <a href="../index.html" class="brand-logo text-decoration-none">
+          TechZone<span class="dot">.</span>
+        </a>
+        <span class="fw-bold fs-5 text-secondary border-start ps-3">Thanh Toán</span>
+        <a href="cart.html" class="text-decoration-none text-primary small fw-semibold">
+          <i class="bi bi-arrow-left me-1"></i> Quay lại giỏ hàng
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Checkout Main -->
+  <main class="py-4 checkout-container">
+    <div class="container">
+      <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+        <div class="row g-4">
+          <!-- Left Column: Shipping, Items, Voucher, Payment -->
+          <div class="col-lg-8">
+            <!-- 1. Shipping Address Card -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+              <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill text-primary"></i> Địa Chỉ Nhận Hàng
+              </h5>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-secondary">Họ và tên người nhận *</label>
+                  <input type="text" class="form-control" id="shipping-name" required placeholder="Ví dụ: Võ Thành Đạt">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold text-secondary">Số điện thoại *</label>
+                  <input type="tel" class="form-control" id="shipping-phone" required placeholder="Ví dụ: 0912345678" pattern="[0-9]{10}">
+                </div>
+                <div class="col-12">
+                  <label class="form-label small fw-semibold text-secondary">Địa chỉ chi tiết *</label>
+                  <input type="text" class="form-control" id="shipping-address" required placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố">
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Ordered Items Review -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+              <h5 class="fw-bold mb-3 d-flex align-items-center justify-content-between">
+                <span><i class="bi bi-box-seam text-primary me-2"></i>Sản Phẩm Đặt Mua</span>
+                <span class="badge bg-light text-dark small" id="checkout-items-count">0 món</span>
+              </h5>
+
+              <div class="border rounded-3 p-3 bg-light-surface mb-2" id="checkout-items-review">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+
+            <!-- 3. Voucher Card -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+              <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-ticket-perforated-fill text-accent"></i> Mã Giảm Giá TechZone
+              </h5>
+
+              <div class="row g-2 align-items-center">
+                <div class="col-sm-8">
+                  <select class="form-select" id="voucher-select" onchange="handleVoucherSelect(this.value)">
+                    <option value="">-- Chọn voucher có sẵn --</option>
+                    <!-- Rendered by JS -->
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <div class="input-group">
+                    <input type="text" class="form-control text-uppercase" id="voucher-code-input" placeholder="Mã voucher">
+                    <button class="btn btn-outline-primary" type="button" onclick="applyCustomVoucher()">Áp dụng</button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="voucher-applied-info" class="mt-2 text-success small fw-semibold" style="display: none;">
+                <i class="bi bi-check-circle-fill me-1"></i><span id="voucher-applied-text"></span>
+              </div>
+            </div>
+
+            <!-- 4. Payment Method -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+              <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-credit-card-2-front-fill text-primary"></i> Phương Thức Thanh Toán
+              </h5>
+
+              <div class="form-check p-3 border rounded-3 mb-2 bg-white d-flex align-items-center gap-3">
+                <input class="form-check-input ms-0 mt-0" type="radio" name="paymentMethod" id="pmCOD" value="COD" checked style="cursor: pointer;">
+                <label class="form-check-label flex-grow-1 cursor-pointer" for="pmCOD">
+                  <div class="fw-bold text-dark">Thanh toán khi nhận hàng (COD)</div>
+                  <small class="text-muted">Thanh toán tiền mặt cho nhân viên giao hàng khi nhận và kiểm tra kiện hàng</small>
+                </label>
+                <i class="bi bi-cash-coin fs-3 text-success"></i>
+              </div>
+
+              <div class="form-check p-3 border rounded-3 bg-white d-flex align-items-center gap-3">
+                <input class="form-check-input ms-0 mt-0" type="radio" name="paymentMethod" id="pmBANK" value="BANK" style="cursor: pointer;">
+                <label class="form-check-label flex-grow-1 cursor-pointer" for="pmBANK">
+                  <div class="fw-bold text-dark">Chuyển khoản qua Tài khoản Ngân hàng</div>
+                  <small class="text-muted">Quét mã VietQR hoặc chuyển khoản trực tiếp qua ngân hàng trực tuyến 24/7</small>
+                </label>
+                <i class="bi bi-qr-code fs-3 text-primary"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Sticky Order Summary -->
+          <div class="col-lg-4">
+            <div class="order-summary-card sticky-top" style="top: 90px;">
+              <h5 class="summary-title mb-3">Tóm Tắt Đơn Hàng</h5>
+
+              <div class="summary-row">
+                <span class="text-secondary">Tiền hàng</span>
+                <span class="fw-semibold text-dark" id="summary-subtotal">0₫</span>
+              </div>
+
+              <div class="summary-row">
+                <span class="text-secondary">Phí vận chuyển</span>
+                <span class="fw-semibold text-dark" id="summary-shipping">150.000₫</span>
+              </div>
+
+              <div class="summary-row text-success" id="summary-discount-row" style="display: none;">
+                <span>Giảm giá Voucher</span>
+                <span class="fw-semibold" id="summary-discount">-0₫</span>
+              </div>
+
+              <div class="summary-row total-row">
+                <span>Tổng cộng:</span>
+                <span class="price fs-3" id="summary-grand-total">0₫</span>
+              </div>
+
+              <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold py-3">
+                  <i class="bi bi-shield-check me-2"></i>Xác Nhận Đặt Hàng
+                </button>
+              </div>
+
+              <div class="text-center text-muted small mt-3">
+                <i class="bi bi-lock-fill me-1"></i> Thông tin được mã hóa bảo mật 256-bit
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container text-center text-secondary small">
+      © 2026 TechZone. All rights reserved. Bản quyền thuộc về PRJ301_SE1910_G6.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/cart.js"></script>
+
+  <script>
+    let currentVoucher = null;
+    let checkoutItems = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initCheckoutPage();
+    });
+
+    function initCheckoutPage() {
+      // Pre-fill user profile info if available
+      const user = getCurrentUser();
+      if (user) {
+        document.getElementById("shipping-name").value = user.fullname || "";
+        document.getElementById("shipping-phone").value = user.phone || "";
+        document.getElementById("shipping-address").value = "Số 45 Lê Duẩn, Bến Nghé, Quận 1, TP. Hồ Chí Minh";
+      }
+
+      // Check if checkout is for selected items from cart
+      const cart = getCart();
+      checkoutItems = cart.filter(i => i.selected);
+
+      if (checkoutItems.length === 0) {
+        showToast("Không có sản phẩm nào được chọn để thanh toán!", "warning");
+        setTimeout(() => {
+          window.location.href = "cart.html";
+        }, 1500);
+        return;
+      }
+
+      renderCheckoutItems();
+      renderVoucherOptions();
+      recalculateCheckout();
+    }
+
+    function renderCheckoutItems() {
+      const container = document.getElementById("checkout-items-review");
+      const countEl = document.getElementById("checkout-items-count");
+      if (!container) return;
+
+      const totalQty = checkoutItems.reduce((sum, i) => sum + i.quantity, 0);
+      if (countEl) countEl.textContent = `${totalQty} sản phẩm`;
+
+      container.innerHTML = checkoutItems.map(item => `
+        <div class="d-flex align-items-center justify-content-between py-2 border-bottom last-border-0">
+          <div class="d-flex align-items-center gap-3">
+            <img src="../${item.product.image}" alt="${item.product.name}" class="rounded border" style="width: 54px; height: 54px; object-fit: contain;">
+            <div>
+              <h6 class="mb-0 fs-6 fw-semibold text-dark line-clamp-1">${item.product.name}</h6>
+              <small class="text-muted">SL: x${item.quantity}</small>
+            </div>
+          </div>
+          <span class="fw-bold text-danger">${formatVND(item.product.price * item.quantity)}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderVoucherOptions() {
+      const select = document.getElementById("voucher-select");
+      if (!select) return;
+
+      const subtotal = checkoutItems.reduce((sum, i) => sum + (i.product.price * i.quantity), 0);
+      const availableVouchers = VOUCHERS.filter(v => subtotal >= v.minOrderValue);
+
+      let html = '<option value="">-- Chọn voucher có sẵn --</option>';
+      availableVouchers.forEach(v => {
+        const desc = v.discountType === "PERCENT" ? `Giảm ${v.discountValue}%` : `Giảm ${formatVND(v.discountValue)}`;
+        html += `<option value="${v.code}">${v.code} - ${desc} (Đơn từ ${formatVND(v.minOrderValue)})</option>`;
+      });
+
+      select.innerHTML = html;
+    }
+
+    function handleVoucherSelect(code) {
+      if (!code) {
+        currentVoucher = null;
+      } else {
+        currentVoucher = VOUCHERS.find(v => v.code === code) || null;
+      }
+      recalculateCheckout();
+    }
+
+    function applyCustomVoucher() {
+      const codeInput = document.getElementById("voucher-code-input").value.trim().toUpperCase();
+      if (!codeInput) return;
+
+      const voucher = VOUCHERS.find(v => v.code === codeInput);
+      const subtotal = checkoutItems.reduce((sum, i) => sum + (i.product.price * i.quantity), 0);
+
+      if (!voucher) {
+        showToast("Mã voucher không tồn tại hoặc đã hết hạn!", "danger");
+        return;
+      }
+
+      if (subtotal < voucher.minOrderValue) {
+        showToast(`Đơn hàng cần tối thiểu ${formatVND(voucher.minOrderValue)} để áp dụng mã này!`, "warning");
+        return;
+      }
+
+      currentVoucher = voucher;
+      document.getElementById("voucher-select").value = voucher.code;
+      showToast(`Áp dụng voucher <b>${voucher.code}</b> thành công!`, "success");
+      recalculateCheckout();
+    }
+
+    function recalculateCheckout() {
+      const subtotal = checkoutItems.reduce((sum, i) => sum + (i.product.price * i.quantity), 0);
+      let discount = 0;
+
+      if (currentVoucher) {
+        if (currentVoucher.discountType === "PERCENT") {
+          discount = subtotal * (currentVoucher.discountValue / 100);
+        } else {
+          discount = currentVoucher.discountValue;
+        }
+      }
+
+      const grandTotal = Math.max(0, subtotal + SHIPPING_FEE - discount);
+
+      // Update UI elements
+      document.getElementById("summary-subtotal").textContent = formatVND(subtotal);
+      document.getElementById("summary-shipping").textContent = formatVND(SHIPPING_FEE);
+
+      const discountRow = document.getElementById("summary-discount-row");
+      const discountVal = document.getElementById("summary-discount");
+      const voucherInfo = document.getElementById("voucher-applied-info");
+      const voucherText = document.getElementById("voucher-applied-text");
+
+      if (discount > 0) {
+        discountRow.style.display = "flex";
+        discountVal.textContent = `-${formatVND(discount)}`;
+        voucherInfo.style.display = "block";
+        voucherText.textContent = `Đã áp dụng voucher ${currentVoucher.code} (-${formatVND(discount)})`;
+      } else {
+        discountRow.style.display = "none";
+        voucherInfo.style.display = "none";
+      }
+
+      document.getElementById("summary-grand-total").textContent = formatVND(grandTotal);
+    }
+
+    function handlePlaceOrder(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("shipping-name").value.trim();
+      const phone = document.getElementById("shipping-phone").value.trim();
+      const address = document.getElementById("shipping-address").value.trim();
+      const paymentMethod = document.querySelector("input[name='paymentMethod']:checked").value;
+
+      if (!name || !phone || !address) {
+        showToast("Vui lòng điền đầy đủ thông tin giao hàng!", "warning");
+        return;
+      }
+
+      const subtotal = checkoutItems.reduce((sum, i) => sum + (i.product.price * i.quantity), 0);
+      let discount = 0;
+      if (currentVoucher) {
+        discount = currentVoucher.discountType === "PERCENT" ? subtotal * (currentVoucher.discountValue / 100) : currentVoucher.discountValue;
+      }
+      const grandTotal = Math.max(0, subtotal + SHIPPING_FEE - discount);
+
+      // Create new order record
+      const orderId = Date.now();
+      const orderCode = `TZ-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      const newOrder = {
+        orderId: orderId,
+        orderCode: orderCode,
+        orderTime: new Date().toISOString().slice(0, 19).replace("T", " "),
+        status: "PROCESSING",
+        statusLabel: "Chờ xác nhận",
+        shippingAddress: address,
+        recipientName: name,
+        recipientPhone: phone,
+        paymentMethod: paymentMethod,
+        shippingFee: SHIPPING_FEE,
+        voucherId: currentVoucher ? currentVoucher.id : null,
+        voucherCode: currentVoucher ? currentVoucher.code : null,
+        voucherDiscount: discount,
+        subtotal: subtotal,
+        totalAmount: grandTotal,
+        items: checkoutItems.map(i => ({
+          productId: i.product.id,
+          productName: i.product.name,
+          productPrice: i.product.price,
+          quantity: i.quantity,
+          image: i.product.image
+        }))
+      };
+
+      // Save to localStorage orders list
+      let orders = JSON.parse(localStorage.getItem("techzone_orders")) || SAMPLE_ORDERS;
+      orders.unshift(newOrder);
+      localStorage.setItem("techzone_orders", JSON.stringify(orders));
+
+      // Remove checked out items from cart
+      let cart = getCart();
+      const checkedOutIds = checkoutItems.map(i => i.cartItemId);
+      cart = cart.filter(i => !checkedOutIds.includes(i.cartItemId));
+      saveCart(cart);
+
+      // Save latest order info for success page
+      localStorage.setItem("techzone_last_order", JSON.stringify(newOrder));
+
+      // Redirect to success page
+      window.location.href = `order-success.html?orderId=${orderCode}`;
+    }
+  </script>
+</body>
+</html>

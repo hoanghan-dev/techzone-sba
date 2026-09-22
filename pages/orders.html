@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch Sử Đơn Hàng - TechZone</title>
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <span><i class="bi bi-headset me-1"></i> Hotline: <strong>0916 973 161</strong></span>
+        <span><i class="bi bi-envelope me-1"></i> support@techzone.vn</span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <a href="../admin/dashboard.html" class="text-decoration-none"><i class="bi bi-shield-lock me-1"></i> Admin Portal</a>
+        <span>|</span>
+        <a href="orders.html" class="text-decoration-none text-white fw-bold"><i class="bi bi-truck me-1"></i> Tra cứu đơn hàng</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="navbar-main d-flex justify-content-between align-items-center gap-3">
+        <a href="../index.html" class="brand-logo text-decoration-none">
+          TechZone<span class="dot">.</span>
+        </a>
+
+        <div class="header-search flex-grow-1 mx-md-4">
+          <form action="products.html" method="GET">
+            <div class="input-group">
+              <input type="text" name="txtSearch" class="form-control" placeholder="Tìm kiếm laptop, điện thoại, phụ kiện..." required>
+              <button class="btn btn-search" type="submit"><i class="bi bi-search fs-6"></i></button>
+            </div>
+          </form>
+        </div>
+
+        <div class="nav-actions">
+          <div id="user-auth-menu"></div>
+          <a href="cart.html" class="nav-action-btn cart-badge-icon text-decoration-none">
+            <i class="bi bi-cart3 fs-4"></i>
+            <span class="cart-counter" style="display: none;">0</span>
+            <span class="d-none d-lg-inline">Giỏ hàng</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Order History Content -->
+  <main class="py-4">
+    <div class="container" style="max-width: 960px;">
+      <h1 class="h3 fw-bold mb-3">Đơn Hàng Của Tôi</h1>
+
+      <!-- Status Tabs -->
+      <div class="card border-0 shadow-sm rounded-4 mb-3 bg-white">
+        <ul class="nav nav-pills justify-content-around p-2" id="orderStatusTabs">
+          <li class="nav-item">
+            <button class="nav-link active rounded-pill fw-semibold" onclick="filterOrdersByStatus('ALL')">Tất cả</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link rounded-pill fw-semibold" onclick="filterOrdersByStatus('PROCESSING')">Chờ xác nhận</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link rounded-pill fw-semibold" onclick="filterOrdersByStatus('PENDING')">Chờ giao hàng</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link rounded-pill fw-semibold" onclick="filterOrdersByStatus('COMPLETED')">Hoàn thành</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link rounded-pill fw-semibold" onclick="filterOrdersByStatus('CANCELED')">Đã hủy</button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Search in Orders -->
+      <div class="input-group mb-4 shadow-sm rounded-3 overflow-hidden">
+        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+        <input type="text" class="form-control border-start-0 py-2" id="orderSearchInput" 
+               placeholder="Tìm kiếm theo Mã đơn hàng hoặc Tên sản phẩm..." oninput="handleOrderSearch(this.value)">
+      </div>
+
+      <!-- Orders List Container -->
+      <div id="orders-list-container">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container text-center text-secondary small">
+      © 2026 TechZone. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/cart.js"></script>
+
+  <script>
+    let activeStatus = "ALL";
+    let searchKeyword = "";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderOrdersList();
+    });
+
+    function getStoredOrders() {
+      const stored = localStorage.getItem("techzone_orders");
+      if (stored) {
+        try { return JSON.parse(stored); } catch (e) { return SAMPLE_ORDERS; }
+      }
+      return SAMPLE_ORDERS;
+    }
+
+    function filterOrdersByStatus(status) {
+      activeStatus = status;
+      const tabs = document.querySelectorAll("#orderStatusTabs button");
+      tabs.forEach(t => t.classList.remove("active"));
+      event.target.classList.add("active");
+      renderOrdersList();
+    }
+
+    function handleOrderSearch(val) {
+      searchKeyword = val.toLowerCase().trim();
+      renderOrdersList();
+    }
+
+    function renderOrdersList() {
+      const container = document.getElementById("orders-list-container");
+      if (!container) return;
+
+      let orders = getStoredOrders();
+
+      // Filter by status
+      if (activeStatus !== "ALL") {
+        orders = orders.filter(o => o.status === activeStatus);
+      }
+
+      // Filter by search keyword
+      if (searchKeyword) {
+        orders = orders.filter(o => 
+          o.orderCode.toLowerCase().includes(searchKeyword) ||
+          o.items.some(i => i.productName.toLowerCase().includes(searchKeyword))
+        );
+      }
+
+      if (orders.length === 0) {
+        container.innerHTML = `
+          <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">
+            <i class="bi bi-box-seam text-muted fs-1 mb-3"></i>
+            <h5 class="fw-bold">Chưa có đơn hàng nào</h5>
+            <p class="text-muted">Không tìm thấy đơn hàng nào phù hợp với bộ lọc hiện tại.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const statusMap = {
+        PROCESSING: { label: "Chờ xác nhận", class: "status-processing" },
+        PENDING: { label: "Đang giao hàng", class: "status-pending" },
+        COMPLETED: { label: "Hoàn thành", class: "status-completed" },
+        CANCELED: { label: "Đã hủy", class: "status-canceled" }
+      };
+
+      container.innerHTML = orders.map(order => {
+        const st = statusMap[order.status] || { label: order.status, class: "status-processing" };
+
+        return `
+          <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white overflow-hidden">
+            <!-- Order Header -->
+            <div class="card-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-shop text-primary"></i>
+                <span class="fw-bold text-dark">TechZone Store</span>
+                <span class="text-muted small ms-2">| Mã: <strong>#${order.orderCode}</strong></span>
+              </div>
+              <span class="badge-status ${st.class}">
+                ${st.label}
+              </span>
+            </div>
+
+            <!-- Items -->
+            <div class="card-body p-3">
+              ${order.items.map(item => `
+                <div class="d-flex align-items-center justify-content-between py-2 border-bottom last-border-0">
+                  <div class="d-flex align-items-center gap-3">
+                    <img src="../${item.image}" alt="${item.productName}" class="rounded border" style="width: 72px; height: 72px; object-fit: contain;">
+                    <div>
+                      <h6 class="mb-1 text-dark fw-semibold line-clamp-1">${item.productName}</h6>
+                      <small class="text-muted">Số lượng: x${item.quantity}</small>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <span class="fw-bold text-danger">${formatVND(item.productPrice * item.quantity)}</span>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+
+            <!-- Footer & Actions -->
+            <div class="card-footer bg-light p-3 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+              <div class="small text-muted">
+                Đặt ngày: <strong>${order.orderTime}</strong>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between justify-content-sm-end gap-3">
+                <div>
+                  <span class="small text-muted">Thành tiền:</span>
+                  <span class="price fs-5">${formatVND(order.totalAmount)}</span>
+                </div>
+                <div class="d-flex gap-2">
+                  <a href="order-detail.html?orderId=${order.orderId}" class="btn btn-outline-primary btn-sm px-3 rounded-pill fw-semibold">
+                    Chi tiết
+                  </a>
+                  <button class="btn btn-primary btn-sm px-3 rounded-pill fw-semibold" onclick="reorderItems(${order.orderId})">
+                    Mua lại
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function reorderItems(orderId) {
+      const orders = getStoredOrders();
+      const order = orders.find(o => o.orderId === orderId);
+      if (!order) return;
+
+      order.items.forEach(item => {
+        addToCart(item.productId, item.quantity, true);
+      });
+      showToast("Đã thêm các sản phẩm trong đơn vào giỏ hàng!", "success");
+      setTimeout(() => {
+        window.location.href = "cart.html";
+      }, 800);
+    }
+  </script>
+</body>
+</html>
