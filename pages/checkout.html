@@ -118,7 +118,7 @@
               </h5>
 
               <div class="form-check p-3 border rounded-3 mb-2 bg-white d-flex align-items-center gap-3">
-                <input class="form-check-input ms-0 mt-0" type="radio" name="paymentMethod" id="pmCOD" value="COD" checked style="cursor: pointer;">
+                <input class="form-check-input ms-0 mt-0" type="radio" name="paymentMethod" id="pmCOD" value="COD" checked style="cursor: pointer;" onchange="togglePaymentPreview()">
                 <label class="form-check-label flex-grow-1 cursor-pointer" for="pmCOD">
                   <div class="fw-bold text-dark">Thanh toán khi nhận hàng (COD)</div>
                   <small class="text-muted">Thanh toán tiền mặt cho nhân viên giao hàng khi nhận và kiểm tra kiện hàng</small>
@@ -127,12 +127,36 @@
               </div>
 
               <div class="form-check p-3 border rounded-3 bg-white d-flex align-items-center gap-3">
-                <input class="form-check-input ms-0 mt-0" type="radio" name="paymentMethod" id="pmBANK" value="BANK" style="cursor: pointer;">
+                <input class="form-check-input ms-0 mt-0" type="radio" name="paymentMethod" id="pmBANK" value="BANK" style="cursor: pointer;" onchange="togglePaymentPreview()">
                 <label class="form-check-label flex-grow-1 cursor-pointer" for="pmBANK">
-                  <div class="fw-bold text-dark">Chuyển khoản qua Tài khoản Ngân hàng</div>
-                  <small class="text-muted">Quét mã VietQR hoặc chuyển khoản trực tiếp qua ngân hàng trực tuyến 24/7</small>
+                  <div class="fw-bold text-dark d-flex align-items-center gap-2">
+                    Chuyển khoản qua Mã QR (VietQR 24/7)
+                    <span class="badge bg-danger-subtle text-danger small">Khuyên dùng</span>
+                  </div>
+                  <small class="text-muted">Quét mã VietQR bằng App ngân hàng bất kỳ, xác nhận thanh toán tự động tức thì</small>
                 </label>
-                <i class="bi bi-qr-code fs-3 text-primary"></i>
+                <i class="bi bi-qr-code-scan fs-3 text-primary"></i>
+              </div>
+
+              <!-- Inline QR info preview box when pmBANK is selected -->
+              <div id="bank-qr-preview-box" class="mt-3 p-3 bg-primary-subtle rounded-3 border border-primary-subtle" style="display: none;">
+                <div class="d-flex align-items-start gap-3">
+                  <div class="p-2 bg-white rounded-3 border shadow-sm text-center d-none d-sm-block" style="width: 70px; height: 70px;">
+                    <i class="bi bi-qr-code fs-1 text-primary"></i>
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <strong class="text-primary">Thanh toán qua VietQR Napas247</strong>
+                      <span class="badge bg-primary text-white">MBBank</span>
+                    </div>
+                    <p class="small text-secondary mb-1">
+                      Sau khi nhấn <strong>Xác Nhận Đặt Hàng</strong>, hệ thống sẽ mở màn hình <strong>Quét Mã QR</strong> chứa chính xác số tiền và nội dung đơn hàng để bạn thanh toán trên ứng dụng ngân hàng.
+                    </p>
+                    <div class="small text-muted">
+                      <i class="bi bi-shield-check text-success me-1"></i> Miễn phí chuyển khoản liên ngân hàng 24/7
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -394,8 +418,20 @@
       // Save latest order info for success page
       localStorage.setItem("techzone_last_order", JSON.stringify(newOrder));
 
-      // Redirect to success page
-      window.location.href = `order-success.html?orderId=${orderCode}`;
+      // Redirect based on payment method
+      if (paymentMethod === "BANK") {
+        window.location.href = `payment-qr.html?orderId=${orderId}&orderCode=${orderCode}`;
+      } else {
+        window.location.href = `order-success.html?orderId=${orderCode}`;
+      }
+    }
+
+    function togglePaymentPreview() {
+      const pmBank = document.getElementById("pmBANK");
+      const previewBox = document.getElementById("bank-qr-preview-box");
+      if (previewBox) {
+        previewBox.style.display = pmBank && pmBank.checked ? "block" : "none";
+      }
     }
   </script>
 </body>

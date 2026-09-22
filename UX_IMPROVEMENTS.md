@@ -141,6 +141,38 @@ Tài liệu này tổng hợp toàn bộ các phân tích đánh giá hiện tr�
 
 ---
 
+### 2.5b. Cổng Thanh Toán Quét Mã VietQR (`pages/payment-qr.html`)
+
+#### Vấn Đề Cũ:
+- Thanh toán chuyển khoản ngân hàng trên hệ thống cũ chỉ có hướng dẫn văn bản khô khan, không có mã QR, khách hàng phải tự gõ từng chữ số tài khoản và cú pháp chuyển tiền, dễ dẫn đến sai sót số tiền hoặc nội dung đơn hàng.
+- Không có cơ chế đếm ngược thời gian thanh toán (countdown timer), không có trạng thái chờ quét mã hay nút kiểm tra thanh toán.
+
+#### Quyết Định Thiết Kế (UX Decision):
+- **Trang Cổng Thanh Toán VietQR Chuyên Biệt (`pages/payment-qr.html`)**:
+  - **Mã VietQR Động Chuẩn Napas 24/7**: Tự động sinh mã QR chứa sẵn số tài khoản MBBank (`0916973161`), tên người thụ hưởng và số tiền thanh toán chính xác đến từng đồng.
+  - **Bộ Đếm Ngược 15 Phút Thực Tế**: Hiển thị đồng hồ đếm ngược `14:59` tạo cảm giác an tâm và thúc đẩy hoàn tất giao dịch.
+  - **Các Nút Sao Chép 1-Chạm (1-Click Copy)**: Cho phép sao chép nhanh Số tài khoản, Số tiền và Cú pháp chuyển khoản (`TECHZONE TZ-XXXX`) kèm Toast thông báo.
+  - **Trạng Thái Pulse Radar "Đang Chờ Quét Mã"**: Hiệu ứng chuyển động mượt mà thể hiện hệ thống đang lắng nghe giao dịch.
+  - **Kịch Bản Kiểm Thử Sandbox & Xác Nhận Thủ Công**:
+    - Nút "Mô phỏng thanh toán (Sandbox)" để demo thành công tức thì trong buổi báo cáo.
+    - Nút "Tôi Đã Chuyển Khoản" mở modal ghi nhận mã giao dịch tham chiếu từ khách hàng.
+    - Nút "Để tôi thanh toán sau" lưu đơn hàng và chuyển về trang chi tiết đơn.
+- **Tích Hợp Sâu Vào Flow Đặt Hàng**:
+  - Tại `checkout.html`: Tự động mở khung xem trước thông tin VietQR khi chọn phương thức này.
+  - Tại `order-success.html`: Hiển thị badge trạng thái thanh toán và nút mở lại mã QR nếu đơn chưa thanh toán.
+  - Tại `order-detail.html`: Hiển thị Thẻ thông tin thanh toán VietQR riêng biệt kèm nút xem lại mã QR.
+
+#### Lý Do:
+- Bắt kịp xu hướng thanh toán không tiền mặt (Cashless) phổ biến nhất tại Việt Nam, mang lại trải nghiệm tương đương các sàn thương mại điện tử hàng đầu (Shopee, CellphoneS).
+
+#### Hiện Thực:
+- `pages/payment-qr.html`
+- `pages/checkout.html` (`togglePaymentPreview()`)
+- `pages/order-success.html`
+- `pages/order-detail.html`
+
+---
+
 ### 2.6. Theo Dõi & Chi Tiết Đơn Hàng (`pages/orders.html` & `pages/order-detail.html`)
 
 #### Vấn Đề Cũ:

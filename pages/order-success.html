@@ -63,6 +63,26 @@
                   <span class="text-muted">Tổng thanh toán:</span>
                   <strong class="text-danger d-block fs-6" id="success-total-amount">0₫</strong>
                 </div>
+                <div class="col-12 mt-2 pt-2 border-top" id="success-payment-status-container" style="display: none;">
+                  <span class="text-muted small">Trạng thái thanh toán:</span>
+                  <div class="mt-1" id="success-payment-status-badge"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- VietQR Payment Prompt if Bank and unpaid -->
+            <div id="success-qr-prompt" class="p-3 mb-4 rounded-3 border border-primary-subtle bg-primary-subtle text-start" style="display: none;">
+              <div class="d-flex align-items-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                  <i class="bi bi-qr-code-scan fs-2 text-primary"></i>
+                  <div>
+                    <strong class="text-primary d-block">Bạn chưa hoàn tất thanh toán VietQR?</strong>
+                    <small class="text-secondary">Quét mã QR để hoàn tất thanh toán giúp đơn hàng được xử lý và giao sớm nhất.</small>
+                  </div>
+                </div>
+                <a href="#" class="btn btn-primary rounded-pill px-3 py-2 fw-semibold text-nowrap" id="btn-reopen-qr">
+                  <i class="bi bi-qr-code me-1"></i> Quét mã QR ngay
+                </a>
               </div>
             </div>
 
@@ -97,12 +117,36 @@
       if (lastOrder) {
         document.getElementById("success-order-code").textContent = lastOrder.orderCode;
         document.getElementById("success-order-time").textContent = lastOrder.orderTime;
-        document.getElementById("success-payment-method").textContent = lastOrder.paymentMethod === "COD" ? "Thanh toán khi nhận hàng (COD)" : "Chuyển khoản Ngân hàng";
+        document.getElementById("success-payment-method").textContent = lastOrder.paymentMethod === "COD" ? "Thanh toán khi nhận hàng (COD)" : "Chuyển khoản VietQR 24/7";
         document.getElementById("success-total-amount").textContent = formatVND(lastOrder.totalAmount);
         
         const viewDetailBtn = document.getElementById("btn-view-order-detail");
         if (viewDetailBtn) {
           viewDetailBtn.href = `order-detail.html?orderId=${lastOrder.orderId}`;
+        }
+
+        // Handle Bank Payment Status Display
+        if (lastOrder.paymentMethod === "BANK") {
+          const statusContainer = document.getElementById("success-payment-status-container");
+          const statusBadge = document.getElementById("success-payment-status-badge");
+          const qrPrompt = document.getElementById("success-qr-prompt");
+          const reopenBtn = document.getElementById("btn-reopen-qr");
+
+          statusContainer.style.display = "block";
+          if (reopenBtn) {
+            reopenBtn.href = `payment-qr.html?orderId=${lastOrder.orderId}&orderCode=${lastOrder.orderCode}`;
+          }
+
+          if (lastOrder.paymentStatus === "PAID") {
+            statusBadge.innerHTML = '<span class="badge bg-success-subtle text-success fs-6"><i class="bi bi-check-circle-fill me-1"></i>Đã thanh toán thành công (PAID)</span>';
+            qrPrompt.style.display = "none";
+          } else if (lastOrder.paymentStatus === "AWAITING_VERIFICATION") {
+            statusBadge.innerHTML = '<span class="badge bg-warning-subtle text-warning-emphasis fs-6"><i class="bi bi-clock-history me-1"></i>Đã gửi thông tin chuyển khoản (Chờ xác nhận)</span>';
+            qrPrompt.style.display = "none";
+          } else {
+            statusBadge.innerHTML = '<span class="badge bg-danger-subtle text-danger fs-6"><i class="bi bi-exclamation-circle-fill me-1"></i>Chưa thanh toán (Chờ quét mã QR)</span>';
+            qrPrompt.style.display = "block";
+          }
         }
       }
     });

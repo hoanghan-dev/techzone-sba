@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh Toán Qua Mã QR (VietQR) - TechZone</title>
+
+  <!-- Bootstrap 5 & Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+
+  <style>
+    .qr-payment-wrapper {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .qr-card {
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+
+    .qr-header-banner {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+      color: #ffffff;
+      padding: 24px;
+      position: relative;
+    }
+
+    .qr-frame {
+      background: #ffffff;
+      border: 2px dashed #93c5fd;
+      border-radius: 16px;
+      padding: 16px;
+      display: inline-block;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .qr-frame:hover {
+      border-color: #2563eb;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+    }
+
+    .qr-image-container {
+      width: 240px;
+      height: 240px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .qr-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .pulse-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background-color: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #2563eb;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 8px rgba(37, 99, 235, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+      }
+    }
+
+    .copy-btn {
+      transition: all 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background-color: #e2e8f0;
+    }
+
+    .countdown-box {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .bank-brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .step-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .success-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.96);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body class="bg-light">
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+        <span><i class="bi bi-shield-check me-1 text-success"></i> Cổng Thanh Toán An Toàn 256-Bit</span>
+        <span><i class="bi bi-headset me-1"></i> Hotline: <strong>0916 973 161</strong></span>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <a href="orders.html" class="text-decoration-none"><i class="bi bi-truck me-1"></i> Tra cứu đơn hàng</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="navbar-main d-flex justify-content-between align-items-center">
+        <a href="../index.html" class="brand-logo text-decoration-none">
+          TechZone<span class="dot">.</span>
+        </a>
+        <div class="d-flex align-items-center gap-2">
+          <span class="text-muted small d-none d-sm-inline">Cần trợ giúp?</span>
+          <a href="tel:0916973161" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+            <i class="bi bi-telephone-fill me-1 text-primary"></i> Hỗ trợ thanh toán
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="py-4 py-md-5">
+    <div class="container">
+      <div class="qr-payment-wrapper">
+
+        <!-- Breadcrumb / Stepper -->
+        <div class="d-flex align-items-center justify-content-center gap-2 mb-4 text-muted small">
+          <span>1. Giỏ hàng</span>
+          <i class="bi bi-chevron-right fs-xs"></i>
+          <span>2. Thông tin nhận hàng</span>
+          <i class="bi bi-chevron-right fs-xs"></i>
+          <span class="fw-bold text-primary">3. Quét mã VietQR</span>
+          <i class="bi bi-chevron-right fs-xs"></i>
+          <span>4. Hoàn tất</span>
+        </div>
+
+        <div class="qr-card position-relative">
+          <!-- Success Overlay (Shown when paid) -->
+          <div id="payment-success-overlay" class="success-overlay" style="display: none;">
+            <div class="text-center p-4">
+              <div class="d-inline-flex align-items-center justify-content-center bg-success-subtle text-success rounded-circle mb-3" style="width: 88px; height: 88px;">
+                <i class="bi bi-check2-circle fs-1"></i>
+              </div>
+              <h3 class="fw-bold text-dark mb-2">Thanh Toán Thành Công!</h3>
+              <p class="text-muted mb-4" style="max-width: 420px;">Hệ thống TechZone đã xác nhận giao dịch chuyển khoản cho đơn hàng <strong id="overlay-order-code" class="text-primary">#TZ-0000</strong>. Đang chuyển hướng...</p>
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Đang chuyển...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Header Banner with Countdown -->
+          <div class="qr-header-banner d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <i class="bi bi-qr-code-scan fs-4"></i>
+                <h4 class="fw-bold mb-0">Thanh Toán Chuyển Khoản VietQR</h4>
+              </div>
+              <p class="mb-0 opacity-75 small">Quét mã bằng ứng dụng ngân hàng bất kỳ để hoàn tất thanh toán tức thì 24/7</p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="small opacity-75">Hết hạn sau:</span>
+              <div class="countdown-box d-flex align-items-center gap-1">
+                <i class="bi bi-stopwatch text-warning"></i>
+                <span id="countdown-timer">14:59</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Body -->
+          <div class="p-4 p-md-5">
+            <div class="row g-4 align-items-center">
+              
+              <!-- Left Column: VietQR Code Frame -->
+              <div class="col-lg-5 text-center">
+                <div class="pulse-indicator mb-3">
+                  <span class="pulse-dot"></span>
+                  <span>Đang chờ quét mã thanh toán...</span>
+                </div>
+
+                <div class="qr-frame mb-3">
+                  <div class="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom">
+                    <span class="fw-bold text-primary small d-flex align-items-center gap-1">
+                      <i class="bi bi-shield-fill-check"></i> VietQR Napas247
+                    </span>
+                    <span class="badge bg-primary-subtle text-primary">MBBank</span>
+                  </div>
+
+                  <div class="qr-image-container" id="qr-container">
+                    <img id="vietqr-image" src="" alt="Mã VietQR Thanh Toán">
+                  </div>
+
+                  <div class="pt-2 mt-2 border-top text-center">
+                    <small class="text-muted fw-semibold" id="qr-order-caption">TECHZONE TZ-0000</small>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-2">
+                  <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="downloadQRCode()">
+                    <i class="bi bi-download me-1"></i> Tải ảnh mã QR
+                  </button>
+                  <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="refreshQRCode()">
+                    <i class="bi bi-arrow-repeat me-1"></i> Làm mới
+                  </button>
+                </div>
+              </div>
+
+              <!-- Right Column: Transfer Information -->
+              <div class="col-lg-7">
+                <div class="bg-light p-3 p-md-4 rounded-4 border">
+                  <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                    <i class="bi bi-info-circle-fill text-primary"></i> Thông Tin Chuyển Khoản Chính Xác
+                  </h6>
+
+                  <!-- Amount -->
+                  <div class="d-flex justify-content-between align-items-center p-3 bg-white rounded-3 border mb-2">
+                    <div>
+                      <span class="text-muted small d-block">Số tiền thanh toán:</span>
+                      <strong class="fs-4 text-danger fw-bold" id="transfer-amount">0₫</strong>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary rounded-pill copy-btn px-3" onclick="copyText('transfer-amount-raw', 'Số tiền')">
+                      <i class="bi bi-copy me-1"></i> Sao chép
+                    </button>
+                    <input type="hidden" id="transfer-amount-raw" value="0">
+                  </div>
+
+                  <!-- Bank Name -->
+                  <div class="d-flex justify-content-between align-items-center p-2 px-3 bg-white rounded-3 border mb-2">
+                    <div>
+                      <span class="text-muted small d-block">Ngân hàng thụ hưởng:</span>
+                      <strong class="text-dark">Ngân hàng TMCP Quân Đội (MBBank)</strong>
+                    </div>
+                    <span class="badge bg-primary text-white">MB</span>
+                  </div>
+
+                  <!-- Account Number -->
+                  <div class="d-flex justify-content-between align-items-center p-2 px-3 bg-white rounded-3 border mb-2">
+                    <div>
+                      <span class="text-muted small d-block">Số tài khoản:</span>
+                      <strong class="fs-5 text-primary fw-bold font-monospace" id="transfer-account-number">0916973161</strong>
+                    </div>
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill copy-btn px-3" onclick="copyText('transfer-account-number', 'Số tài khoản')">
+                      <i class="bi bi-copy me-1"></i> Sao chép
+                    </button>
+                  </div>
+
+                  <!-- Account Name -->
+                  <div class="d-flex justify-content-between align-items-center p-2 px-3 bg-white rounded-3 border mb-2">
+                    <div>
+                      <span class="text-muted small d-block">Chủ tài khoản:</span>
+                      <strong class="text-dark text-uppercase" id="transfer-account-name">CONG TY CONG NGHE TECHZONE</strong>
+                    </div>
+                    <i class="bi bi-patch-check-fill text-success fs-5"></i>
+                  </div>
+
+                  <!-- Transfer Memo / Content -->
+                  <div class="d-flex justify-content-between align-items-center p-2 px-3 bg-warning-subtle border border-warning rounded-3 mb-3">
+                    <div>
+                      <span class="text-warning-emphasis small d-block fw-semibold">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i> Nội dung chuyển khoản (bắt buộc):
+                      </span>
+                      <strong class="fs-5 text-dark fw-bold font-monospace" id="transfer-memo">TECHZONE TZ-0000</strong>
+                    </div>
+                    <button class="btn btn-sm btn-warning text-dark rounded-pill copy-btn px-3 fw-semibold" onclick="copyText('transfer-memo', 'Nội dung chuyển khoản')">
+                      <i class="bi bi-copy me-1"></i> Sao chép
+                    </button>
+                  </div>
+
+                  <div class="alert alert-info small py-2 px-3 rounded-3 mb-0 d-flex align-items-start gap-2">
+                    <i class="bi bi-lightbulb-fill text-primary mt-1"></i>
+                    <div>
+                      Vui lòng giữ nguyên <strong>nội dung chuyển khoản</strong> để hệ thống tự động ghi nhận thanh toán trong 1 - 3 phút.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 3 Steps Instructions -->
+                <div class="mt-4 pt-2">
+                  <h6 class="fw-bold text-dark mb-2 small text-uppercase text-muted">Hướng dẫn 3 bước đơn giản:</h6>
+                  <div class="row g-2 small">
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-start gap-2">
+                        <span class="step-badge">1</span>
+                        <span>Mở ứng dụng <strong>Ngân hàng</strong> hoặc <strong>Ví điện tử</strong></span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-start gap-2">
+                        <span class="step-badge">2</span>
+                        <span>Chọn <strong>Quét mã QR</strong> và quét hình mã bên cạnh</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="d-flex align-items-start gap-2">
+                        <span class="step-badge">3</span>
+                        <span>Kiểm tra số tiền, nội dung & <strong>Xác nhận</strong></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Action Buttons Bar -->
+            <div class="mt-5 pt-4 border-top d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+              <div class="d-flex align-items-center gap-2">
+                <a href="orders.html" class="btn btn-link text-decoration-none text-muted p-0" id="btn-pay-later">
+                  <i class="bi bi-arrow-left me-1"></i> Để tôi thanh toán sau
+                </a>
+              </div>
+
+              <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 w-100 w-md-auto">
+                <!-- Sandbox Simulation Button -->
+                <button type="button" class="btn btn-outline-success rounded-pill px-3 py-2 fw-semibold" onclick="simulateSandboxPayment()">
+                  <i class="bi bi-lightning-charge-fill me-1"></i> Mô phỏng thanh toán (Sandbox)
+                </button>
+
+                <!-- Customer Confirmation Button -->
+                <button type="button" class="btn btn-primary btn-lg rounded-pill px-4 py-2 fw-bold shadow-sm" onclick="openTransferConfirmModal()">
+                  <i class="bi bi-check-circle-fill me-2"></i>Tôi Đã Chuyển Khoản
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Security Guarantee Bar -->
+        <div class="row g-3 mt-3 text-center text-muted small">
+          <div class="col-sm-4">
+            <i class="bi bi-shield-lock-fill text-success me-1"></i> Chuẩn VietQR Napas247 Quốc gia
+          </div>
+          <div class="col-sm-4">
+            <i class="bi bi-clock-history text-primary me-1"></i> Xử lý tự động trong 1 - 3 phút
+          </div>
+          <div class="col-sm-4">
+            <i class="bi bi-arrow-repeat text-info me-1"></i> Hỗ trợ tra soát 24/7
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal: Xác nhận mã giao dịch chuyển khoản -->
+  <div class="modal fade" id="modalTransferConfirm" tabindex="-1" aria-labelledby="modalTransferConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="modalTransferConfirmLabel">
+            <i class="bi bi-receipt text-primary me-2"></i>Xác Nhận Đã Chuyển Khoản
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pt-3">
+          <p class="text-muted small mb-3">
+            Vui lòng nhập <strong>Mã tham chiếu / Mã giao dịch</strong> (nếu có trên ứng dụng ngân hàng) để TechZone đối soát và xuất kho nhanh hơn.
+          </p>
+
+          <form id="form-confirm-transfer" onsubmit="handleManualConfirm(event)">
+            <div class="mb-3">
+              <label for="input-transaction-code" class="form-label small fw-semibold text-dark">Mã tham chiếu ngân hàng (Tùy chọn):</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-hash"></i></span>
+                <input type="text" class="form-control" id="input-transaction-code" placeholder="VD: FT240922889911 hoặc MB123456">
+              </div>
+              <div class="form-text">Bạn có thể tìm thấy mã này trong chi tiết giao dịch thành công tại App ngân hàng.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="input-sender-note" class="form-label small fw-semibold text-dark">Ghi chú thêm (Tùy chọn):</label>
+              <textarea class="form-control" id="input-sender-note" rows="2" placeholder="VD: Đã chuyển từ STK đuôi ...123"></textarea>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 pt-2">
+              <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Đóng</button>
+              <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold">
+                <i class="bi bi-send-fill me-1"></i> Xác nhận gửi
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer bg-dark text-white pt-4 pb-4 mt-5">
+    <div class="container text-center text-secondary small">
+      © 2026 TechZone. All rights reserved. Bản quyền thuộc về PRJ301_SE1910_G6.
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1090;">
+    <div id="liveToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMessage">Thông báo</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/cart.js"></script>
+
+  <script>
+    let currentOrder = null;
+    let countdownInterval = null;
+    let secondsLeft = 15 * 60; // 15 minutes
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initQRPaymentPage();
+    });
+
+    function initQRPaymentPage() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderCodeParam = urlParams.get("orderCode");
+      const orderIdParam = parseInt(urlParams.get("orderId"));
+
+      // 1. Fetch order from localStorage
+      const storedOrders = JSON.parse(localStorage.getItem("techzone_orders")) || SAMPLE_ORDERS;
+      const lastOrder = JSON.parse(localStorage.getItem("techzone_last_order"));
+
+      if (orderIdParam) {
+        currentOrder = storedOrders.find(o => o.orderId === orderIdParam);
+      } else if (orderCodeParam) {
+        currentOrder = storedOrders.find(o => o.orderCode === orderCodeParam);
+      }
+
+      if (!currentOrder && lastOrder) {
+        currentOrder = lastOrder;
+      }
+
+      // Fallback sample order if none found
+      if (!currentOrder) {
+        currentOrder = {
+          orderId: Date.now(),
+          orderCode: "TZ-9921",
+          orderTime: new Date().toISOString().slice(0, 19).replace("T", " "),
+          totalAmount: 25490000,
+          paymentMethod: "BANK",
+          status: "PROCESSING"
+        };
+      }
+
+      // 2. Populate UI
+      const orderCode = currentOrder.orderCode || `TZ-${currentOrder.orderId}`;
+      const amount = currentOrder.totalAmount || 0;
+      const memo = `TECHZONE ${orderCode}`;
+
+      document.getElementById("transfer-amount").textContent = formatVND(amount);
+      document.getElementById("transfer-amount-raw").value = amount;
+      document.getElementById("transfer-memo").textContent = memo;
+      document.getElementById("qr-order-caption").textContent = memo;
+
+      const payLaterBtn = document.getElementById("btn-pay-later");
+      if (payLaterBtn) {
+        payLaterBtn.href = `order-detail.html?orderId=${currentOrder.orderId}`;
+      }
+
+      // 3. Generate VietQR Dynamic URL (MBBank, Account: 0916973161)
+      const encodedAccountName = encodeURIComponent("CONG TY CONG NGHE TECHZONE");
+      const encodedMemo = encodeURIComponent(memo);
+      const qrUrl = `https://img.vietqr.io/image/MB-0916973161-compact2.png?amount=${amount}&addInfo=${encodedMemo}&accountName=${encodedAccountName}`;
+
+      const qrImg = document.getElementById("vietqr-image");
+      qrImg.src = qrUrl;
+
+      // Fallback SVG if image fails to load
+      qrImg.onerror = () => {
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(`2|99|0916973161|${encodedAccountName}||0|0|${amount}|${encodedMemo}|transfer_myqr`)}`;
+      };
+
+      // 4. Start Countdown
+      startCountdown();
+    }
+
+    function startCountdown() {
+      const timerEl = document.getElementById("countdown-timer");
+      if (!timerEl) return;
+
+      if (countdownInterval) clearInterval(countdownInterval);
+
+      countdownInterval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft <= 0) {
+          clearInterval(countdownInterval);
+          timerEl.textContent = "00:00";
+          showToast("Mã thanh toán QR đã hết hạn. Vui lòng làm mới trang!", "warning");
+          return;
+        }
+
+        const mins = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
+        const secs = (secondsLeft % 60).toString().padStart(2, '0');
+        timerEl.textContent = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function copyText(elementId, label) {
+      let text = "";
+      const el = document.getElementById(elementId);
+      if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+        text = el.value;
+      } else {
+        text = el.textContent;
+      }
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`Đã sao chép <b>${label}</b>: ${text}`, "success");
+      }).catch(() => {
+        showToast(`Không thể sao chép tự động!`, "danger");
+      });
+    }
+
+    function downloadQRCode() {
+      const qrImg = document.getElementById("vietqr-image");
+      if (!qrImg || !qrImg.src) return;
+
+      const a = document.createElement("a");
+      a.href = qrImg.src;
+      a.download = `VietQR_${currentOrder.orderCode}.png`;
+      a.target = "_blank";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast("Đang tải xuống mã QR thanh toán...", "info");
+    }
+
+    function refreshQRCode() {
+      showToast("Đang làm mới mã QR...", "info");
+      secondsLeft = 15 * 60;
+      initQRPaymentPage();
+    }
+
+    function openTransferConfirmModal() {
+      const modal = new bootstrap.Modal(document.getElementById("modalTransferConfirm"));
+      modal.show();
+    }
+
+    function handleManualConfirm(e) {
+      e.preventDefault();
+      const code = document.getElementById("input-transaction-code").value.trim();
+      const note = document.getElementById("input-sender-note").value.trim();
+
+      // Update order status in localStorage
+      updateOrderPaymentStatus("AWAITING_VERIFICATION", code, note);
+
+      const modalEl = document.getElementById("modalTransferConfirm");
+      const modalInstance = bootstrap.Modal.getInstance(modalEl);
+      if (modalInstance) modalInstance.hide();
+
+      showToast("Đã gửi thông tin xác nhận chuyển khoản! TechZone sẽ duyệt đơn ngay khi nhận được tiền.", "success");
+
+      setTimeout(() => {
+        window.location.href = `order-success.html?orderId=${currentOrder.orderCode}`;
+      }, 1500);
+    }
+
+    function simulateSandboxPayment() {
+      showToast("Đang nhận tín hiệu callback thành công từ cổng VietQR Sandbox...", "info");
+
+      setTimeout(() => {
+        // Update order status to PAID
+        updateOrderPaymentStatus("PAID", `SANDBOX-MB-${Date.now().toString().slice(-6)}`, "Thanh toán qua VietQR Sandbox thành công");
+
+        // Show success overlay
+        const overlay = document.getElementById("payment-success-overlay");
+        document.getElementById("overlay-order-code").textContent = `#${currentOrder.orderCode}`;
+        overlay.style.display = "flex";
+
+        setTimeout(() => {
+          window.location.href = `order-success.html?orderId=${currentOrder.orderCode}`;
+        }, 1800);
+      }, 1200);
+    }
+
+    function updateOrderPaymentStatus(paymentStatus, transactionCode = null, note = null) {
+      if (!currentOrder) return;
+
+      let orders = JSON.parse(localStorage.getItem("techzone_orders")) || SAMPLE_ORDERS;
+      const index = orders.findIndex(o => o.orderId === currentOrder.orderId || o.orderCode === currentOrder.orderCode);
+
+      const updateData = {
+        paymentStatus: paymentStatus,
+        transactionCode: transactionCode || `TXN-${Date.now().toString().slice(-6)}`,
+        paymentNote: note,
+        paymentTime: new Date().toISOString().slice(0, 19).replace("T", " ")
+      };
+
+      if (paymentStatus === "PAID") {
+        updateData.paidAt = new Date().toISOString().slice(0, 19).replace("T", " ");
+      }
+
+      if (index !== -1) {
+        orders[index] = { ...orders[index], ...updateData };
+        localStorage.setItem("techzone_orders", JSON.stringify(orders));
+      }
+
+      let lastOrder = JSON.parse(localStorage.getItem("techzone_last_order")) || currentOrder;
+      lastOrder = { ...lastOrder, ...updateData };
+      localStorage.setItem("techzone_last_order", JSON.stringify(lastOrder));
+    }
+  </script>
+</body>
+</html>

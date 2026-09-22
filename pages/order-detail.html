@@ -89,6 +89,46 @@
             </div>
           </div>
 
+          <!-- VietQR Payment Information Card (Shown if BANK) -->
+          <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white" id="od-bank-payment-card" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
+                <i class="bi bi-qr-code-scan text-primary"></i> Thông Tin Thanh Toán VietQR
+              </h5>
+              <span id="od-payment-status-badge" class="badge"></span>
+            </div>
+
+            <div class="p-3 bg-light rounded-3 border mb-3">
+              <div class="row g-2 small">
+                <div class="col-sm-6">
+                  <span class="text-muted">Ngân hàng thụ hưởng:</span>
+                  <strong class="text-dark d-block">MBBank (0916 973 161)</strong>
+                </div>
+                <div class="col-sm-6">
+                  <span class="text-muted">Chủ tài khoản:</span>
+                  <strong class="text-dark d-block text-uppercase">CONG TY CONG NGHE TECHZONE</strong>
+                </div>
+                <div class="col-sm-6 mt-2">
+                  <span class="text-muted">Nội dung chuyển khoản:</span>
+                  <strong class="text-primary d-block font-monospace" id="od-transfer-memo">TECHZONE ...</strong>
+                </div>
+                <div class="col-sm-6 mt-2">
+                  <span class="text-muted">Mã tham chiếu:</span>
+                  <strong class="text-dark d-block font-monospace" id="od-transaction-code">Chưa cập nhật</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2" id="od-bank-actions">
+              <a href="#" class="btn btn-primary btn-sm rounded-pill px-3 fw-semibold" id="od-btn-open-qr">
+                <i class="bi bi-qr-code me-1"></i> Xem mã QR thanh toán
+              </a>
+              <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-3 fw-semibold" id="od-btn-confirm-transfer" onclick="openOrderDetailConfirmModal()">
+                <i class="bi bi-check-circle me-1"></i> Xác nhận đã chuyển tiền
+              </button>
+            </div>
+          </div>
+
           <!-- Items list -->
           <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
             <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
@@ -144,6 +184,35 @@
     </div>
   </main>
 
+  <!-- Modal: Xác nhận chuyển khoản tại Order Detail -->
+  <div class="modal fade" id="modalOrderDetailConfirm" tabindex="-1" aria-labelledby="modalOrderDetailConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold" id="modalOrderDetailConfirmLabel">
+            <i class="bi bi-receipt text-primary me-2"></i>Xác Nhận Đã Chuyển Khoản
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pt-3">
+          <p class="text-muted small mb-3">
+            Nhập mã giao dịch chuyển khoản trên App ngân hàng để gửi yêu cầu xác thực thanh toán đến quản trị viên TechZone.
+          </p>
+          <div class="mb-3">
+            <label for="od-input-txn-code" class="form-label small fw-semibold text-dark">Mã tham chiếu / Mã giao dịch:</label>
+            <input type="text" class="form-control" id="od-input-txn-code" placeholder="VD: FT240922889911 hoặc MB123456">
+          </div>
+          <div class="d-flex justify-content-end gap-2 pt-2">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Đóng</button>
+            <button type="button" class="btn btn-primary rounded-pill px-4 fw-semibold" onclick="submitOrderDetailConfirm()">
+              <i class="bi bi-send-fill me-1"></i> Gửi xác nhận
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="site-footer bg-dark text-white pt-5 pb-4 mt-5">
     <div class="container text-center text-secondary small">
@@ -180,7 +249,37 @@
       document.getElementById("od-recipient-name").textContent = order.recipientName;
       document.getElementById("od-recipient-phone").textContent = order.recipientPhone;
       document.getElementById("od-recipient-address").textContent = order.shippingAddress;
-      document.getElementById("od-payment-method").textContent = order.paymentMethod === "COD" ? "Thanh toán khi nhận hàng (COD)" : "Chuyển khoản Ngân hàng";
+      document.getElementById("od-payment-method").textContent = order.paymentMethod === "COD" ? "Thanh toán khi nhận hàng (COD)" : "Chuyển khoản VietQR 24/7";
+
+      // VietQR Card handling
+      const bankCard = document.getElementById("od-bank-payment-card");
+      if (order.paymentMethod === "BANK") {
+        bankCard.style.display = "block";
+        document.getElementById("od-transfer-memo").textContent = `TECHZONE ${order.orderCode}`;
+        document.getElementById("od-transaction-code").textContent = order.transactionCode || "Chưa cập nhật";
+        
+        const openQrBtn = document.getElementById("od-btn-open-qr");
+        if (openQrBtn) {
+          openQrBtn.href = `payment-qr.html?orderId=${order.orderId}&orderCode=${order.orderCode}`;
+        }
+
+        const payBadge = document.getElementById("od-payment-status-badge");
+        const confirmBtn = document.getElementById("od-btn-confirm-transfer");
+        if (order.paymentStatus === "PAID") {
+          payBadge.className = "badge bg-success-subtle text-success fs-6";
+          payBadge.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Đã thanh toán (PAID)';
+          if (confirmBtn) confirmBtn.style.display = "none";
+        } else if (order.paymentStatus === "AWAITING_VERIFICATION") {
+          payBadge.className = "badge bg-warning-subtle text-warning-emphasis fs-6";
+          payBadge.innerHTML = '<i class="bi bi-clock-history me-1"></i>Chờ xác nhận';
+          if (confirmBtn) confirmBtn.textContent = "Cập nhật lại mã giao dịch";
+        } else {
+          payBadge.className = "badge bg-danger-subtle text-danger fs-6";
+          payBadge.innerHTML = '<i class="bi bi-exclamation-circle-fill me-1"></i>Chưa thanh toán';
+        }
+      } else {
+        bankCard.style.display = "none";
+      }
 
       // Status & Timeline
       const statusBadge = document.getElementById("od-status-badge");
@@ -232,6 +331,33 @@
       }
 
       document.getElementById("od-grand-total").textContent = formatVND(order.totalAmount);
+    }
+
+    function openOrderDetailConfirmModal() {
+      const modal = new bootstrap.Modal(document.getElementById("modalOrderDetailConfirm"));
+      modal.show();
+    }
+
+    function submitOrderDetailConfirm() {
+      const txnCode = document.getElementById("od-input-txn-code").value.trim();
+      const urlParams = new URLSearchParams(window.location.search);
+      const orderId = parseInt(urlParams.get("orderId"));
+
+      let orders = JSON.parse(localStorage.getItem("techzone_orders")) || SAMPLE_ORDERS;
+      const idx = orders.findIndex(o => o.orderId === orderId);
+
+      if (idx !== -1) {
+        orders[idx].paymentStatus = "AWAITING_VERIFICATION";
+        if (txnCode) orders[idx].transactionCode = txnCode;
+        localStorage.setItem("techzone_orders", JSON.stringify(orders));
+      }
+
+      const modalEl = document.getElementById("modalOrderDetailConfirm");
+      const modalInstance = bootstrap.Modal.getInstance(modalEl);
+      if (modalInstance) modalInstance.hide();
+
+      showToast("Đã cập nhật thông tin chuyển khoản thành công!", "success");
+      initOrderDetail();
     }
 
     function renderTimeline(status) {

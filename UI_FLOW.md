@@ -16,6 +16,7 @@ TechZone Static Prototype Root
 │   ├── product-detail.html (Chi tiết sản phẩm, Thông số & Đánh giá)
 │   ├── cart.html (Giỏ hàng, Chọn sản phẩm & Tính tiền)
 │   ├── checkout.html (Thanh toán, Chọn địa chỉ & Voucher)
+│   ├── payment-qr.html (Thanh toán qua mã QR VietQR Napas 24/7)
 │   ├── order-success.html (Xác nhận đặt hàng thành công)
 │   ├── orders.html (Lịch sử đơn mua & Phân loại trạng thái)
 │   ├── order-detail.html (Chi tiết đơn hàng & Stepper tiến trình)
@@ -49,10 +50,29 @@ graph TD
     C -->|Nhấn 'Mua Ngay'| E[Giỏ Hàng - pages/cart.html]
     D -->|Click Biểu Tượng Giỏ Hàng| E
     E -->|Tích chọn sản phẩm & Nhấn 'Tiến hành đặt hàng'| F[Thanh Toán - pages/checkout.html]
-    F -->|Nhập địa chỉ, Chọn Voucher, Chọn COD/Bank| F
-    F -->|Nhấn 'Đặt Hàng Ngay'| G[Đặt Hàng Thành Công - pages/order-success.html]
-    G -->|Nhấn 'Xem chi tiết đơn hàng'| H[Chi Tiết Đơn Hàng - pages/order-detail.html]
-    G -->|Nhấn 'Tiếp tục mua sắm'| A
+    F -->|Chọn Phương thức: COD| G1[Đặt Hàng Thành Công - pages/order-success.html]
+    F -->|Chọn Phương thức: VietQR| QR[Cổng Thanh Toán VietQR - pages/payment-qr.html]
+    QR -->|Quét mã & Chuyển khoản thành công / Mô phỏng Sandbox| G2[Đặt Hàng Thành Công - pages/order-success.html]
+    QR -->|Chọn 'Để tôi thanh toán sau'| H[Chi Tiết Đơn Hàng - pages/order-detail.html]
+    G1 -->|Nhấn 'Xem chi tiết đơn hàng'| H
+    G2 -->|Nhấn 'Xem chi tiết đơn hàng'| H
+    G1 -->|Nhấn 'Tiếp tục mua sắm'| A
+    G2 -->|Nhấn 'Tiếp tục mua sắm'| A
+```
+
+### 2.4. Luồng Thanh Toán Qua Mã QR (VietQR Payment Flow)
+
+```mermaid
+graph TD
+    Checkout[Trang Checkout - pages/checkout.html] -->|Tích chọn 'Chuyển khoản VietQR'| Preview[Hiển thị Box Preview VietQR & MBBank]
+    Preview -->|Nhấn 'Xác Nhận Đặt Hàng'| QRPage[Trang Thanh Toán VietQR - pages/payment-qr.html]
+    QRPage -->|Hiển thị| QRElements[Mã QR động, Đếm ngược 15:00, STK: 0916973161, Cú pháp: TECHZONE TZ-XXXX]
+    QRPage -->|Nút 1-Chạm| CopyAction[Sao chép STK, Số tiền, Nội dung chuyển khoản]
+    QRPage -->|Khách quét App & Chuyển tiền| ActionDone[Nhấn 'Tôi Đã Chuyển Khoản' -> Modal nhập mã giao dịch]
+    QRPage -->|Kiểm thử Sandbox| ActionSandbox[Nhấn 'Mô Phỏng Thanh Toán' -> Tự động chuyển PAID]
+    ActionDone --> SuccessPage[Trang Đặt Hàng Thành Công - pages/order-success.html]
+    ActionSandbox --> SuccessPage
+    SuccessPage --> DetailPage[Trang Chi Tiết Đơn Hàng - pages/order-detail.html: Thẻ VietQR & Nút kiểm tra]
 ```
 
 ### 2.2. Luồng Quản Lý Tài Khoản & Lịch Sử Mua Hàng
